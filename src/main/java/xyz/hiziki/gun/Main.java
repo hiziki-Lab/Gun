@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitTask;
+import xyz.hiziki.gun.command.CommandManager;
 import xyz.hiziki.gun.guns.GunItemEnum;
 import xyz.hiziki.gun.guns.PlayerGunInfo;
 import xyz.hiziki.gun.util.GameGameMode;
@@ -109,6 +110,8 @@ public final class Main extends JavaPlugin implements Listener
 
         getServer().getPluginManager().registerEvents(this, this);
         gameMode = GameGameMode.NONE;
+
+        new CommandManager(plugin);
 
         getLogger().info("プラグインは正常に起動しました。");
     }
