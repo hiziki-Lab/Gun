@@ -1,0 +1,15 @@
+name: Gun
+version: '${project.version}'
+main: xyz.hiziki.gun.Main
+api-version: 1.16
+prefix: Gun
+authors: [ myurdo, hi_kun_JPN ]
+description: gun plugin
+website: www.hiziki.xyz
+commands:
+  GameStart:
+    description: game start command.
+    usage: /<command> subCommand
+  gameEnd:
+    description: game end command.
+    usage: /<command>
