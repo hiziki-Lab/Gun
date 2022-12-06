@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public enum GunItemEnum
 {
-    ARROW_GUN(GunItem.Info.NormalGun(), 25, 5, 0),
+    NORMAL_GUN(GunItem.Info.NormalGun(), 25, 5, 0),
     SHOT_GUN(GunItem.Info.ShotGun(), 6, 5, 1),
     LIGHTNING_GUN(GunItem.Info.LightningGun(), 10, 10, 5),
     FLAME_THROWER_GUN(GunItem.Info.FlameThrowerGun(), 20, 10, 0),

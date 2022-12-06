@@ -40,7 +40,7 @@ public class GunItem
         {
             ItemStack item = new ItemStack(Material.BLAZE_ROD, 1);
             ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName(ChatColor.GOLD + "矢銃");
+            meta.setDisplayName(ChatColor.GOLD + "自動小銃");
             meta.setLore(new ArrayList<>(Arrays.asList("まゆマークが", "後ろに", "ついている")));
             item.setItemMeta(meta);
             return item;

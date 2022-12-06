@@ -155,7 +155,7 @@ public class PlayerGunInfo
             {
                 switch (this.GunKind)
                 {
-                    case ARROW_GUN ->
+                    case NORMAL_GUN ->
                     {
                         GunItem.Event.ArrowGunRod(player);
                         CoolDownFlg = true;
