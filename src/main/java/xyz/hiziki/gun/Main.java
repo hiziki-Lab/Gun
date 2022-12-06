@@ -1,5 +1,6 @@
 package xyz.hiziki.gun;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -63,8 +64,7 @@ public final class Main extends JavaPlugin implements Listener
 
             if(args.length == 0)
             {
-                gameMode = GameGameMode.TEAM;
-                scoreBoard = new ScoreboardSetter(getServer());
+                sender.sendMessage(ChatColor.RED + "サブコマンドが設定されていません。");
             }
             else
             {
@@ -79,7 +79,11 @@ public final class Main extends JavaPlugin implements Listener
                     }
                 }
             }
-            if (bar != null) bar.removeAll();
+
+            if (bar != null)
+            {
+                bar.removeAll();
+            }
 
             BossBarView();
             return true;
@@ -89,10 +93,12 @@ public final class Main extends JavaPlugin implements Listener
         {
             // TaskStartコマンド が実行された時に実行
             bar.removeAll();
+
             if (BossBarTask!= null)
             {
                 BossBarTask.cancel();
             }
+
             gameMode = GameGameMode.NONE;
             return true;
         }
