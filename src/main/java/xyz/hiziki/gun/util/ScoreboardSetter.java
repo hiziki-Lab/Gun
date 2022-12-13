@@ -69,12 +69,14 @@ public class ScoreboardSetter
         ScoreBord.clearSlot(DisplaySlot.SIDEBAR);
         teams = new ArrayList<>();
 
-        for (Team Team :ScoreBord.getTeams())
+        for (Team team : ScoreBord.getTeams())
         {
-            Team.unregister();
+            team.unregister();
         }
+
         // チームが既に登録されているかどうか確認し、
         // 登録されていないなら新規作成します。
+
         for (TeamKindEnum team : TeamKindEnum.values())
         {
             if(ScoreBord.getTeam(team.getTeamName()) == null)

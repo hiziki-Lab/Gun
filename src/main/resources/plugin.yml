@@ -10,6 +10,6 @@ commands:
   GameStart:
     description: game start command.
     usage: /<command> subCommand
-  gameEnd:
+  GameEnd:
     description: game end command.
     usage: /<command>
