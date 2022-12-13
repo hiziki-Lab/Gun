@@ -157,17 +157,12 @@ public class PlayerGunInfo
                 {
                     case NORMAL_GUN ->
                     {
-                        GunItem.Event.ArrowGunRod(player);
-                        CoolDownFlg = true;
-                    }
-                    case LIGHTNING_GUN ->
-                    {
-                        GunItem.Event.LightningGunRod(player);
+                        GunItem.Event.AutomaticGunRod(player);
                         CoolDownFlg = true;
                     }
                     case SHOT_GUN ->
                     {
-                        GunItem.Event.SmallFireBallGunRod(player);
+                        GunItem.Event.ShotGunRod(player);
                         CoolDownFlg = true;
                     }
                     case FLAME_THROWER_GUN ->
@@ -180,11 +175,6 @@ public class PlayerGunInfo
                         GunItem.Event.SearchGunRod(player);
                         CoolDownFlg = true;
                     }
-                    case TARGET_GUN ->
-                    {
-                        GunItem.Event.TargetGunRod(player);
-                        CoolDownFlg = true;
-                    }
                     case POTION_GUN ->
                     {
                         GunItem.Event.potionGunRos(player);
@@ -194,7 +184,6 @@ public class PlayerGunInfo
                 NowBullet--;
                 ReloadFlg = NowBullet <= 0;
             }
-
         }
 
         private void ReloadStart()

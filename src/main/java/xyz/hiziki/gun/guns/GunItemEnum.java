@@ -11,10 +11,8 @@ public enum GunItemEnum
 {
     NORMAL_GUN(GunItem.Info.NormalGun(), 25, 5, 0),
     SHOT_GUN(GunItem.Info.ShotGun(), 6, 5, 0.5),
-    LIGHTNING_GUN(GunItem.Info.LightningGun(), 10, 10, 5),
     FLAME_THROWER_GUN(GunItem.Info.FlameThrowerGun(), 20, 10, 0),
     SEARCH_GUN(GunItem.Info.SearchGun(), 10, 10, 10),
-    TARGET_GUN(GunItem.Info.TargetGun(), 5, 10, 0),
     POTION_GUN(GunItem.Info.PotionGun(), 3, 10, 1);
 
     private final ItemStack gunItemStack; //アイテム情報
