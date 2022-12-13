@@ -70,9 +70,9 @@ public final class Main extends JavaPlugin implements Listener
             {
                 switch (args[0])
                 {
-                    case "SOLO" -> gameMode = GameGameMode.SOLO;
-                    case "SURVIVAL" -> gameMode = GameGameMode.SURVIVAL;
-                    case "TEAM" ->
+                    case "solo" -> gameMode = GameGameMode.SOLO;
+                    case "survival" -> gameMode = GameGameMode.SURVIVAL;
+                    case "team" ->
                     {
                         scoreBoard = new ScoreboardSetter(getServer());
                         gameMode = GameGameMode.TEAM;
