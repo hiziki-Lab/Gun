@@ -50,21 +50,11 @@ public final class Main extends JavaPlugin implements Listener
         if (cmd.getName().equalsIgnoreCase("GameStart"))
         {
             // TaskStartコマンド が実行された時に実行
-            PlayerGunInfoList = new ArrayList<>();
-
-            if (BossBarTask!= null)
-            {
-                BossBarTask.cancel();
-            }
-
-            for (Player target : getServer().getOnlinePlayers())
-            {
-                PlayerGunInfoList.add(new PlayerGunInfo(target));
-            }
 
             if(args.length == 0)
             {
                 sender.sendMessage(ChatColor.RED + "サブコマンドが設定されていません。");
+                return true;
             }
             else
             {
@@ -77,8 +67,26 @@ public final class Main extends JavaPlugin implements Listener
                         scoreBoard = new ScoreboardSetter(getServer());
                         gameMode = GameGameMode.TEAM;
                     }
+                    default ->
+                    {
+                        sender.sendMessage("不明なサブコマンドです。");
+                        return true;
+                    }
                 }
             }
+
+            PlayerGunInfoList = new ArrayList<>();
+
+            if (BossBarTask!= null)
+            {
+                BossBarTask.cancel();
+            }
+
+            for (Player target : getServer().getOnlinePlayers())
+            {
+                PlayerGunInfoList.add(new PlayerGunInfo(target));
+            }
+
 
             if (bar != null)
             {
