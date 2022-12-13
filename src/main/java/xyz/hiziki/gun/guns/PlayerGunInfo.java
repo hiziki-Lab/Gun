@@ -79,7 +79,7 @@ public class PlayerGunInfo
         });
     }
 
-//    //打てるか否か コメントアウト
+//    //打てるか否か
 //    public Boolean Can(GunItemEnum GunKind) //使われてないですね？
 //    {
 //        GunInfo guninfo = GunInfoList.stream().filter(v -> Objects.equals(v.GunKind, GunKind)).findFirst().orElse(null);
@@ -118,10 +118,13 @@ public class PlayerGunInfo
     private static class GunInfo
     {
         public GunItemEnum GunKind;
+
         public int NowBullet;
 
         public Boolean CoolDownFlg;
+
         public Boolean CoolDownNowFlg;
+
         public Boolean ReloadFlg;
 
         public Boolean ReloadNowFig;
@@ -139,9 +142,7 @@ public class PlayerGunInfo
             this.NowReloadTime = GunKind.getReloadTime();
         }
 
-        /**
-         * その銃を打つことができるか
-         */
+        // その銃を打つことができるか
         private Boolean Can()
         {
             return !ReloadFlg && !ReloadNowFig && !CoolDownFlg;
@@ -155,12 +156,22 @@ public class PlayerGunInfo
                 {
                     case NORMAL_GUN ->
                     {
-                        GunItem.Event.AutomaticGunRod(player);
+                        GunItem.Event.AutomaticGun(player);
                         CoolDownFlg = true;
                     }
                     case SHOT_GUN ->
                     {
-                        GunItem.Event.ShotGunRod(player);
+                        GunItem.Event.ShotGun(player);
+                        CoolDownFlg = true;
+                    }
+                    case SNIPER_GUN ->
+                    {
+                        GunItem.Event.SniperGun(player);
+                        CoolDownFlg = true;
+                    }
+                    case EXPLODING_GUN ->
+                    {
+                        GunItem.Event.ExplodingGun(player);
                         CoolDownFlg = true;
                     }
                     case FLAME_THROWER_GUN ->
@@ -170,12 +181,17 @@ public class PlayerGunInfo
                     }
                     case SEARCH_GUN ->
                     {
-                        GunItem.Event.SearchGunRod(player);
+                        GunItem.Event.SearchGun(player);
                         CoolDownFlg = true;
                     }
                     case POTION_GUN ->
                     {
-                        GunItem.Event.potionGunRos(player);
+                        GunItem.Event.PotionGun(player);
+                        CoolDownFlg = true;
+                    }
+                    case HAND_GUN ->
+                    {
+                        GunItem.Event.HandGun(player);
                         CoolDownFlg = true;
                     }
                 }
