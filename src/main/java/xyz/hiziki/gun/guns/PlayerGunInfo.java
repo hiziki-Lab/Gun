@@ -79,14 +79,12 @@ public class PlayerGunInfo
         });
     }
 
-    /**
-     * 打てるか否か
-     */
-    public Boolean Can(GunItemEnum GunKind) //使われてないですね？
-    {
-        GunInfo guninfo = GunInfoList.stream().filter(v -> Objects.equals(v.GunKind, GunKind)).findFirst().orElse(null);
-        return guninfo.Can();
-    }
+//    //打てるか否か コメントアウト
+//    public Boolean Can(GunItemEnum GunKind) //使われてないですね？
+//    {
+//        GunInfo guninfo = GunInfoList.stream().filter(v -> Objects.equals(v.GunKind, GunKind)).findFirst().orElse(null);
+//        return guninfo.Can();
+//    }
 
     public void ViewBullet()
     {
