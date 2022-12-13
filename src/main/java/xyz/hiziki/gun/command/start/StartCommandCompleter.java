@@ -5,7 +5,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class StartCommandCompleter implements TabCompleter
@@ -16,10 +15,8 @@ public class StartCommandCompleter implements TabCompleter
         List<String> list = new ArrayList<>(); //List作成
 
         list.add("team");
-        list.add("solo");
         list.add("survival");
-
-        Collections.sort(list); //Listをソート
+        list.add("solo");
 
         return list; //list
     }
