@@ -32,33 +32,33 @@ public class GunItem
 
     public static class Info
     {
-        static ItemStack NormalGun()
+        static ItemStack AutomaticGun() //自動小銃
         {
-            return Util.itemMeta(Material.BLAZE_ROD, ChatColor.GOLD + "自動小銃",
+            return Util.itemMeta(Material.MUSIC_DISC_13, ChatColor.GOLD + "自動小銃",
                     "まゆマークが", "後ろに", "ついている");
         }
 
-        static ItemStack ShotGun()
+        static ItemStack ShotGun() //散弾銃
         {
-            return Util.itemMeta(Material.BLAZE_ROD, ChatColor.GOLD + "散弾銃",
+            return Util.itemMeta(Material.MUSIC_DISC_CAT, ChatColor.GOLD + "散弾銃",
                     "真ん中の", "まゆさんマークが", "柔らかい");
         }
 
-        static ItemStack FlameThrowerGun()
+        static ItemStack FlameThrowerGun() //放射器
         {
-            return Util.itemMeta(Material.BLAZE_ROD, ChatColor.GOLD + "火炎放射器",
+            return Util.itemMeta(Material.MUSIC_DISC_FAR, ChatColor.GOLD + "火炎放射器",
                     "炎がでてくる", "でもよくみると", "赤いきのこ");
         }
 
-        static ItemStack SearchGun()
+        static ItemStack SearchGun() //索敵銃
         {
-            return Util.itemMeta(Material.BLAZE_ROD, ChatColor.GOLD + "索敵銃",
+            return Util.itemMeta(Material.MUSIC_DISC_MELLOHI, ChatColor.GOLD + "索敵銃",
                     "アンテナの", "代わりに", "まゆさんヘッド");
         }
 
-        static ItemStack PotionGun()
+        static ItemStack PotionGun() //散布銃
         {
-            return Util.itemMeta(Material.BLAZE_ROD, ChatColor.GOLD + "ポーション散布銃",
+            return Util.itemMeta(Material.MUSIC_DISC_STAL, ChatColor.GOLD + "ポーション散布銃",
                     "一番", "弱い", "銃かもしれない");
         }
     }
@@ -71,7 +71,7 @@ public class GunItem
 
             player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 0);
             Vector vec = player.getEyeLocation().getDirection();
-            Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 2, 0), vec, 5F, 2F);
+            Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 2, 0), vec, 2F, 2F);
             arrow.setShooter(player);
             arrow.setColor(Color.fromBGR((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256)));
             arrow.setGravity(false);
