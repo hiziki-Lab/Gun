@@ -30,7 +30,6 @@ public class Util
         ItemMeta meta = stack.getItemMeta();
         meta.setDisplayName(itemName);
         meta.setLore(Arrays.asList(lore1, lore2, lore3));
-        meta.addEnchant(Enchantment.ARROW_INFINITE, 15, true);
         stack.setItemMeta(meta);
         return stack;
     }
