@@ -71,7 +71,7 @@ public class GunItem
 
             player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 0);
             Vector vec = player.getEyeLocation().getDirection();
-            Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 2, 0), vec, 3F, 3F);
+            Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 2, 0), vec, 5F, 2F);
             arrow.setShooter(player);
             arrow.setColor(Color.fromBGR((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256)));
             arrow.setGravity(false);
@@ -161,7 +161,7 @@ public class GunItem
 
             player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 0);
             Vector vec = player.getEyeLocation().getDirection();
-            Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 2, 0), vec, 0.1F, 8F);
+            Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 2, 0), vec, 0.3F, 8F);
             arrow.setShooter(player);
             arrow.setColor(Color.fromBGR((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256)));
             arrow.setGravity(false);
@@ -180,7 +180,7 @@ public class GunItem
                     arrow.setColor(Color.fromBGR((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256)));
                 }
             }, 10, 20);
-            player.getServer().getScheduler().runTaskLater(plugin, arrow::remove, 10 * 20);
+            player.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 10 * 20);
         }
     }
 }
