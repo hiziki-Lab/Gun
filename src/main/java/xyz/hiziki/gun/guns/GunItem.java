@@ -146,13 +146,11 @@ public class GunItem
 
             for (Entity entity : targetList)
             {
-                Location tmp = entity.getLocation();
-
                 for (int i = 0; i < 20; i++)
                 {
-                    entity.getWorld().spawnParticle(Particle.LAVA,
-                            tmp.add(0, i, 0), 10, 0, 0, 0, 1);
+                    Player target = (Player) entity;
 
+                    target.addPotionEffect(PotionEffectType.GLOWING.createEffect(80, 1));
                 }
             }
         }
