@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitTask;
 import xyz.hiziki.gun.command.CommandManager;
+import xyz.hiziki.gun.event.EventManager;
 import xyz.hiziki.gun.guns.GunItemEnum;
 import xyz.hiziki.gun.guns.PlayerGunInfo;
 import xyz.hiziki.gun.util.GameGameMode;
@@ -126,6 +127,7 @@ public final class Main extends JavaPlugin implements Listener
         gameMode = GameGameMode.NONE;
 
         new CommandManager(plugin);
+        new EventManager(plugin);
 
         getLogger().info("プラグインは正常に起動しました。");
     }
@@ -169,7 +171,7 @@ public final class Main extends JavaPlugin implements Listener
     @EventHandler
     public void PlayerToggleSneakEvent(PlayerToggleSneakEvent e)
     {
-        if (gameMode ==  GameGameMode.NONE) return;
+        if (gameMode == GameGameMode.NONE) return;
         PlayerGunInfo target = GetPlayerGunInfo(e.getPlayer());
         GunItemEnum kind = GunItemEnum.GetKind(e.getPlayer());
 
