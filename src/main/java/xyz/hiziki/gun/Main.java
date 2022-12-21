@@ -3,6 +3,7 @@ package xyz.hiziki.gun;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
@@ -50,7 +51,7 @@ public final class Main extends JavaPlugin implements Listener
     {
         if (cmd.getName().equalsIgnoreCase("GameStart"))
         {
-            // TaskStartコマンド が実行された時に実行
+            // GameStartコマンド が実行された時に実行
 
             if(args.length == 0)
             {
@@ -88,27 +89,32 @@ public final class Main extends JavaPlugin implements Listener
                 PlayerGunInfoList.add(new PlayerGunInfo(target));
             }
 
-
             if (bar != null)
             {
                 bar.removeAll();
             }
 
-            BossBarView();
+            bossBarView();
             return true;
         }
 
         if (cmd.getName().equalsIgnoreCase("GameEnd"))
         {
-            // TaskStartコマンド が実行された時に実行
-            bar.removeAll();
+            // GameEndコマンド が実行された時に実行
+            removeGun();
 
-            if (BossBarTask!= null)
+            if (bar != null) //Null回避
+            {
+                bar.removeAll();
+            }
+
+            if (BossBarTask != null)
             {
                 BossBarTask.cancel();
             }
 
             gameMode = GameGameMode.NONE;
+
             return true;
         }
         return false;
@@ -141,109 +147,108 @@ public final class Main extends JavaPlugin implements Listener
     }
 
     @EventHandler
-    public void PlayerItemHeldEvent(PlayerItemHeldEvent e)
+    public void onPlayerItemHeld(PlayerItemHeldEvent e)
+    {
+        if (gameMode == GameGameMode.NONE)
+        {
+            getServer().getScheduler().runTaskLater(this, () ->
+            {
+                PlayerGunInfo target = getPlayerGunInfo(e.getPlayer());
+                //玉の残段数を表示
+                target.viewBullet();
+            }, 1);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent e)
     {
         if (gameMode != GameGameMode.NONE)
         {
-            return;
+            PlayerGunInfo target = getPlayerGunInfo(e.getPlayer());
+            target.setGun();
         }
+    }
 
-        getServer().getScheduler().runTaskLater(this, () ->
+    @EventHandler
+    public void onPlayerToggleSneak(PlayerToggleSneakEvent e)
+    {
+        if (gameMode != GameGameMode.NONE)
         {
-            PlayerGunInfo target = GetPlayerGunInfo(e.getPlayer());
+            PlayerGunInfo target = getPlayerGunInfo(e.getPlayer());
+            GunItemEnum kind = GunItemEnum.getKind(e.getPlayer());
+
+            if (kind != null)
+            {
+                //リロード処理
+                target.reload(kind);
+                //玉の残段数を表示
+                target.viewBullet();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e)
+    {
+        PlayerGunInfo target = getPlayerGunInfo(e.getPlayer());
+        GunItemEnum kind = GunItemEnum.getKind(e.getPlayer());
+
+        if (kind != null)
+        {
+            //射撃
+            target.fire(kind);
             //玉の残段数を表示
-            target.ViewBullet();
-        }, 1);
-
-    }
-
-    /**
-     * リスポーンイベント
-     */
-    @EventHandler
-    public void PlayerRespawnEvent(PlayerRespawnEvent e)
-    {
-        if (gameMode == GameGameMode.NONE) return;
-        PlayerGunInfo target = GetPlayerGunInfo(e.getPlayer());
-        target.SetGun();
+            target.viewBullet();
+        }
     }
 
     @EventHandler
-    public void PlayerToggleSneakEvent(PlayerToggleSneakEvent e)
+    public void onPlayerDeath(PlayerDeathEvent e)
     {
-        if (gameMode == GameGameMode.NONE) return;
-        PlayerGunInfo target = GetPlayerGunInfo(e.getPlayer());
-        GunItemEnum kind = GunItemEnum.GetKind(e.getPlayer());
-
-        if (kind == null) return;
-
-        //リロード処理
-        target.Reload(kind);
-        //玉の残段数を表示
-        target.ViewBullet();
+        if (gameMode != GameGameMode.NONE)
+        {
+            if (e.getEntity().getKiller() != null)
+            {
+                if (e.getEntity().getKiller().getType() == EntityType.PLAYER)
+                {
+                    switch (gameMode)
+                    {
+                        case TEAM :
+                            scoreBoard.PointCheck(e.getEntity().getKiller().getPlayer(), e.getEntity());
+                            break;
+                        case SOLO:
+                            break;
+                        case SURVIVAL:
+                            e.getEntity().setGameMode(GameMode.SPECTATOR);
+                            break;
+                    }
+                }
+            }
+        }
     }
 
-    @EventHandler
-    public void PlayerInteractEvent(PlayerInteractEvent e)
-    {
-        if (gameMode ==  GameGameMode.NONE) return;
+//    public void playerGunBullet()
+//    {
+//        if (gameMode != GameGameMode.NONE)
+//        {
+//            for (Player target : plugin.getServer().getOnlinePlayers())
+//            {
+//                target.getInventory().getItemInMainHand().getType() ==
+//            }
+//        }
+//    }
 
-        PlayerGunInfo target = GetPlayerGunInfo(e.getPlayer());
-        GunItemEnum kind = GunItemEnum.GetKind(e.getPlayer());
-        if (kind == null)
-        {
-            return;
-        }
 
-        target.Fire(kind);
 
-        //玉の残段数を表示
-        target.ViewBullet();
-    }
-
-    @EventHandler
-    public void PlayerDeathEvent(PlayerDeathEvent event)
-    {
-        if (gameMode ==  GameGameMode.NONE)
-        {
-            return;
-        }
-
-        if (event.getEntity().getKiller() == null)
-        {
-            return;
-        }
-
-        if (event.getEntity().getKiller().getType() != EntityType.PLAYER)
-        {
-            return;
-        }
-
-        switch (gameMode)
-        {
-            case TEAM :
-                scoreBoard.PointCheck(event.getEntity().getKiller().getPlayer(), event.getEntity());
-                break;
-            case SOLO:
-                break;
-            case SURVIVAL:
-                event.getEntity().setGameMode(GameMode.SPECTATOR);
-                break;
-
-        }
-
-    }
-
-    /**
-     * プレイヤーリスト検索
-     */
-    private PlayerGunInfo GetPlayerGunInfo(Player Player)
+    //プレイヤーリスト検索
+    private PlayerGunInfo getPlayerGunInfo(Player Player)
     {
         return PlayerGunInfoList.stream().filter(v ->
                 Objects.equals(v.Player.getUniqueId(), Player.getUniqueId())).findFirst().orElse(null);
     }
 
-    private void BossBarView()
+    private void bossBarView()
     {
         //画面上記のBar設定
         bar = getServer().createBossBar("戦争時間", BarColor.BLUE, BarStyle.SEGMENTED_6, BarFlag.CREATE_FOG);
@@ -271,6 +276,7 @@ public final class Main extends JavaPlugin implements Listener
                     {
                         gameMode = GameGameMode.NONE;
                         target.Player.sendTitle("終了です！！", "お疲れ様です。", 20, 200, 20);
+                        removeGun();
                     }
                     bar.removeAll();
                     gameMode = GameGameMode.NONE;
@@ -283,6 +289,25 @@ public final class Main extends JavaPlugin implements Listener
 
             }
         },0,20);
+    }
+
+    private void removeGun()
+    {
+        for (Player target : plugin.getServer().getOnlinePlayers())
+        {
+            for (ItemStack item : target.getInventory())
+            {
+                if (item != null)
+                {
+                    switch (item.getType())
+                    {
+                        case MUSIC_DISC_13, MUSIC_DISC_CAT, MUSIC_DISC_BLOCKS, MUSIC_DISC_CHIRP,
+                                MUSIC_DISC_FAR, MUSIC_DISC_MELLOHI, MUSIC_DISC_STAL, MUSIC_DISC_STRAD
+                                -> target.getInventory().removeItem(item);
+                    }
+                }
+            }
+        }
     }
 
     public static JavaPlugin getPlugin()
