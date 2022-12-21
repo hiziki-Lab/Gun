@@ -8,29 +8,26 @@ import java.util.Objects;
 
 public enum GunItemEnum
 {
-    NORMAL_GUN(GunItem.Info.AutomaticGun(), 25, 5, 0),
-    SHOT_GUN(GunItem.Info.ShotGun(), 6, 5, 0.5),
-    SNIPER_GUN(GunItem.Info.SniperGun(), 4, 6, 5),
-    EXPLODING_GUN(GunItem.Info.ExplodingGun(), 1000, 0, 3),
-    FLAME_THROWER_GUN(GunItem.Info.FlameThrowerGun(), 20, 10, 0),
-    SEARCH_GUN(GunItem.Info.SearchGun(), 10, 10, 10),
-    POTION_GUN(GunItem.Info.PotionGun(), 3, 10, 1),
-    HAND_GUN(GunItem.Info.HandGun(), 12, 4, 0.6);
+    AUTOMATIC_GUN(GunItem.Info.automaticGun(), 25, 5, 0),
+    SHOT_GUN(GunItem.Info.shotGun(), 6, 5, 0.5),
+    SNIPER_GUN(GunItem.Info.sniperGun(), 4, 6, 6),
+    EXPLODING_GUN(GunItem.Info.explodingGun(), 1000, 0, 3),
+    FLAME_THROWER_GUN(GunItem.Info.flameThrowerGun(), 20, 10, 0),
+    SEARCH_GUN(GunItem.Info.searchGun(), 10, 10, 10),
+    POTION_GUN(GunItem.Info.potionGun(), 10, 5, 1),
+    HAND_GUN(GunItem.Info.handGun(), 12, 4, 0.6);
 
     private final ItemStack gunItemStack; //アイテム情報
+    private final int bullet; //球数
+    private final int reloadTime; //リロード時間
+    private final double coolDownTime; //発射後のクールダウン
 
-    private final int Bullet; //球数
-
-    private final int ReloadTime;
-
-    private final double CoolDownTime;
-
-    GunItemEnum(ItemStack _ItemStack, int _Bullet, int _ReloadTime, double _CoolDownTime)
+    GunItemEnum(ItemStack itemStack, int bullet, int reloadTime, double coolDownTime)
     {
-        this.gunItemStack = _ItemStack;
-        this.Bullet = _Bullet;
-        this.ReloadTime = _ReloadTime;
-        this.CoolDownTime = _CoolDownTime;
+        this.gunItemStack = itemStack;
+        this.bullet = bullet;
+        this.reloadTime = reloadTime;
+        this.coolDownTime = coolDownTime;
     }
 
     public ItemStack getGunItemStack()
@@ -40,20 +37,20 @@ public enum GunItemEnum
 
     public int getBullet()
     {
-        return Bullet;
+        return bullet;
     }
 
     public int getReloadTime()
     {
-        return ReloadTime;
+        return reloadTime;
     }
 
     public double getCoolDownTime()
     {
-        return CoolDownTime;
+        return coolDownTime;
     }
 
-    public static GunItemEnum GetKind(Player Player)
+    public static GunItemEnum getKind(Player Player)
     {
         return Arrays.stream(GunItemEnum.values()).filter(v -> Objects.equals(v.getGunItemStack(),
                 Player.getInventory().getItemInMainHand())).findFirst().orElse(null);
