@@ -47,8 +47,10 @@ public class ScoreboardSetter
             return "【"+this.getViewTeamName()+"】";
         }
 
-        public static TeamKindEnum GetEnum(String TeamName){
-            for (TeamKindEnum team: TeamKindEnum.values() ) {
+        public static TeamKindEnum GetEnum(String TeamName)
+        {
+            for (TeamKindEnum team: TeamKindEnum.values() )
+            {
                 if(team.getTeamName().equals(TeamName)) return team;
             }
             return null;
@@ -113,7 +115,7 @@ public class ScoreboardSetter
         }
         while (!tmpPlayerNameList.isEmpty())
         {
-            for (Team team: teams )
+            for (Team team: teams)
             {
                 int No = (int) (Math.random() * ((tmpPlayerNameList.size() - 1)));
                 team.addEntry(tmpPlayerNameList.get(No));
