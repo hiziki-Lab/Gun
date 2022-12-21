@@ -2,7 +2,7 @@ package xyz.hiziki.gun.guns;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Effect;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,40 +24,54 @@ public class PlayerGunInfo
     {
         this.Player = Player;
         this.GunInfoList = new ArrayList<>();
-        this.SetGun();
+        this.setGun();
     }
 
-    public void SetGun()
+    public void setGun()
     {
         GunInfoList.clear();
         for (GunItemEnum kind : GunItemEnum.values())
         {
             GunInfoList.add(new GunInfo(kind));
         }
-        GunItem.SetGun(this.Player);
+        GunItem.setGun(this.Player);
     }
 
-    public String ViewBullet(ItemStack item)
+    public String viewBullet(ItemStack item)
     {
         GunInfo guninfo = GunInfoList.stream().filter(v -> Objects.equals(v.GunKind.getGunItemStack(), item)).findFirst().orElse(null);
-        if (guninfo == null) return null;
-        if (guninfo.ReloadNowFig) return "リロード中" + guninfo.NowReloadTime + "s待ってね";
-        return !guninfo.ReloadFlg ? guninfo.GunKind.getBullet() + "/" + guninfo.NowBullet : "リロードが必要だ！しゃがんでリロードしよう";
+        if (guninfo == null)
+        {
+            return null;
+        }
+
+        if (guninfo.ReloadNowFlg)
+        {
+            return "リロード中" + guninfo.NowReloadTime + "s待ってね";
+        }
+        else
+        {
+            return !guninfo.ReloadFlg ? guninfo.NowBullet + "/" + guninfo.GunKind.getBullet() : "リロードが必要だ！しゃがんでリロードしよう";
+        }
     }
 
-    public void Fire(GunItemEnum GunKind)
+    public void fire(GunItemEnum GunKind)
     {
         GunInfo guninfo = GunInfoList.stream().filter(v -> Objects.equals(v.GunKind, GunKind)).findFirst().orElse(null);
-        guninfo.Fire(this.Player);
-        this.CoolDown(guninfo);
+        guninfo.fire(this.Player);
+        this.coolDown(guninfo);
     }
 
-    public void Reload(GunItemEnum GunKind)
+    public void reload(GunItemEnum GunKind)
     {
         GunInfo guninfo = GunInfoList.stream().filter(v -> Objects.equals(v.GunKind, GunKind)).findFirst().orElse(null);
-        if (guninfo.ReloadNowFig) return;
-        guninfo.ReloadStart();
-        this.Player.getWorld().playEffect(this.Player.getLocation(), Effect.END_GATEWAY_SPAWN, 0);
+        if (guninfo.ReloadNowFlg)
+        {
+            return;
+        }
+
+        guninfo.reloadStart();
+        this.Player.playSound(Player.getLocation(), Sound.BLOCK_SMITHING_TABLE_USE, 1, 1);
         this.Player.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
         {
             try
@@ -66,7 +80,7 @@ public class PlayerGunInfo
                 {
                     Thread.sleep(1000);
                     guninfo.NowReloadTime--;
-                    ViewBullet();
+                    viewBullet();
                 }
             }
             catch (InterruptedException e)
@@ -74,28 +88,21 @@ public class PlayerGunInfo
                 throw new RuntimeException(e);
             }
 
-            guninfo.ReloadEnd();
-            ViewBullet();
+            guninfo.reloadEnd();
+            viewBullet();
         });
     }
 
-//    //打てるか否か
-//    public Boolean Can(GunItemEnum GunKind) //使われてないですね？
-//    {
-//        GunInfo guninfo = GunInfoList.stream().filter(v -> Objects.equals(v.GunKind, GunKind)).findFirst().orElse(null);
-//        return guninfo.Can();
-//    }
-
-    public void ViewBullet()
+    public void viewBullet()
     {
-        String tmp = this.ViewBullet(this.Player.getInventory().getItemInMainHand());
+        String tmp = this.viewBullet(this.Player.getInventory().getItemInMainHand());
         if (tmp == null) return;
         TextComponent component = new TextComponent();
         component.setText(tmp);
         this.Player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
     }
 
-    private void CoolDown(GunInfo guninfo)
+    private void coolDown(GunInfo guninfo)
     {
         //クールダウン中は動かさない
         if (guninfo.CoolDownNowFlg) return;
@@ -127,7 +134,7 @@ public class PlayerGunInfo
 
         public Boolean ReloadFlg;
 
-        public Boolean ReloadNowFig;
+        public Boolean ReloadNowFlg;
 
         public int NowReloadTime;
 
@@ -137,82 +144,43 @@ public class PlayerGunInfo
             this.NowBullet = GunKind.getBullet();
             this.CoolDownFlg = false;
             this.ReloadFlg = false;
-            this.ReloadNowFig = false;
+            this.ReloadNowFlg = false;
             this.CoolDownNowFlg = false;
             this.NowReloadTime = GunKind.getReloadTime();
         }
 
-        // その銃を打つことができるか
-        private Boolean Can()
+        private void fire(Player player)
         {
-            return !ReloadFlg && !ReloadNowFig && !CoolDownFlg;
-        }
-
-        private void Fire(Player player)
-        {
-            if (this.Can())
+            if (!ReloadFlg && !ReloadNowFlg && !CoolDownFlg) //銃を撃てるかどうか
             {
                 switch (this.GunKind)
                 {
-                    case NORMAL_GUN ->
-                    {
-                        GunItem.Event.AutomaticGun(player);
-                        CoolDownFlg = true;
-                    }
-                    case SHOT_GUN ->
-                    {
-                        GunItem.Event.ShotGun(player);
-                        CoolDownFlg = true;
-                    }
-                    case SNIPER_GUN ->
-                    {
-                        GunItem.Event.SniperGun(player);
-                        CoolDownFlg = true;
-                    }
-                    case EXPLODING_GUN ->
-                    {
-                        GunItem.Event.ExplodingGun(player);
-                        CoolDownFlg = true;
-                    }
-                    case FLAME_THROWER_GUN ->
-                    {
-                        GunItem.Event.FlameThrowerGun(player);
-                        CoolDownFlg = true;
-                    }
-                    case SEARCH_GUN ->
-                    {
-                        GunItem.Event.SearchGun(player);
-                        CoolDownFlg = true;
-                    }
-                    case POTION_GUN ->
-                    {
-                        GunItem.Event.PotionGun(player);
-                        CoolDownFlg = true;
-                    }
-                    case HAND_GUN ->
-                    {
-                        GunItem.Event.HandGun(player);
-                        CoolDownFlg = true;
-                    }
+                    case AUTOMATIC_GUN -> GunItem.Event.automaticGun(player);
+                    case SHOT_GUN -> GunItem.Event.shotGun(player);
+                    case SNIPER_GUN -> GunItem.Event.sniperGun(player);
+                    case EXPLODING_GUN -> GunItem.Event.explodingGun(player);
+                    case FLAME_THROWER_GUN -> GunItem.Event.flameThrowerGun(player);
+                    case SEARCH_GUN -> GunItem.Event.searchGun(player);
+                    case POTION_GUN -> GunItem.Event.potionGun(player);
+                    case HAND_GUN -> GunItem.Event.handGun(player);
                 }
+                CoolDownFlg = true;
                 NowBullet--;
                 ReloadFlg = NowBullet <= 0;
             }
         }
 
-        private void ReloadStart()
+        private void reloadStart()
         {
-            this.ReloadNowFig = true;
+            this.ReloadNowFlg = true;
             this.NowReloadTime = GunKind.getReloadTime();
-
         }
 
-        private void ReloadEnd()
+        private void reloadEnd()
         {
-            this.ReloadNowFig = false;
+            this.ReloadNowFlg = false;
             this.ReloadFlg = false;
             this.NowBullet = GunKind.getBullet();
-
         }
     }
 }
