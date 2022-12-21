@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import xyz.hiziki.gun.command.CommandManager;
 import xyz.hiziki.gun.event.EventManager;
@@ -101,7 +102,6 @@ public final class Main extends JavaPlugin implements Listener
         if (cmd.getName().equalsIgnoreCase("GameEnd"))
         {
             // GameEndコマンド が実行された時に実行
-            removeGun();
 
             if (bar != null) //Null回避
             {
@@ -112,6 +112,8 @@ public final class Main extends JavaPlugin implements Listener
             {
                 BossBarTask.cancel();
             }
+
+            removeGun();
 
             gameMode = GameGameMode.NONE;
 
@@ -151,12 +153,16 @@ public final class Main extends JavaPlugin implements Listener
     {
         if (gameMode == GameGameMode.NONE)
         {
-            getServer().getScheduler().runTaskLater(this, () ->
+            new BukkitRunnable()
             {
-                PlayerGunInfo target = getPlayerGunInfo(e.getPlayer());
-                //玉の残段数を表示
-                target.viewBullet();
-            }, 1);
+                @Override public void run()
+                {
+                    PlayerGunInfo target = getPlayerGunInfo(e.getPlayer());
+                    //玉の残段数を表示
+                    target.viewBullet();
+                }
+            }.runTaskLater(plugin, 1);
+
         }
     }
 
@@ -228,24 +234,11 @@ public final class Main extends JavaPlugin implements Listener
         }
     }
 
-//    public void playerGunBullet()
-//    {
-//        if (gameMode != GameGameMode.NONE)
-//        {
-//            for (Player target : plugin.getServer().getOnlinePlayers())
-//            {
-//                target.getInventory().getItemInMainHand().getType() ==
-//            }
-//        }
-//    }
-
-
-
     //プレイヤーリスト検索
     private PlayerGunInfo getPlayerGunInfo(Player Player)
     {
         return PlayerGunInfoList.stream().filter(v ->
-                Objects.equals(v.Player.getUniqueId(), Player.getUniqueId())).findFirst().orElse(null);
+                Objects.equals(v.player.getUniqueId(), Player.getUniqueId())).findFirst().orElse(null);
     }
 
     private void bossBarView()
@@ -255,7 +248,7 @@ public final class Main extends JavaPlugin implements Listener
         bar.setProgress(1);
         for (PlayerGunInfo target : PlayerGunInfoList)
         {
-            bar.addPlayer(target.Player);
+            bar.addPlayer(target.player);
         }
 
         BossBarTask = Bukkit.getScheduler().runTaskTimer(this, new Runnable()
@@ -275,7 +268,7 @@ public final class Main extends JavaPlugin implements Listener
                     for (PlayerGunInfo target : PlayerGunInfoList)
                     {
                         gameMode = GameGameMode.NONE;
-                        target.Player.sendTitle("終了です！！", "お疲れ様です。", 20, 200, 20);
+                        target.player.sendTitle("終了です！！", "お疲れ様です。", 20, 200, 20);
                         removeGun();
                     }
                     bar.removeAll();
