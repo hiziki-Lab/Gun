@@ -34,50 +34,42 @@ public class GunItem
     {
         public static ItemStack automaticGun() //自小銃
         {
-            return Util.itemMeta(Material.MUSIC_DISC_13, ChatColor.GOLD + "自動小銃",
-                    "まゆマークが", "後ろに", "ついている");
+            return Util.itemMeta(Material.MUSIC_DISC_13, ChatColor.GOLD + "自動小銃");
         }
 
         public static ItemStack shotGun() //散弾銃
         {
-            return Util.itemMeta(Material.MUSIC_DISC_CAT, ChatColor.GOLD + "散弾銃",
-                    "真ん中の", "まゆさんマークが", "柔らかい");
+            return Util.itemMeta(Material.MUSIC_DISC_CAT, ChatColor.GOLD + "散弾銃");
         }
 
         public static ItemStack sniperGun() //狙撃銃
         {
-            return Util.itemMeta(Material.MUSIC_DISC_BLOCKS, ChatColor.GOLD + "狙撃銃",
-                    "放たれる弾", "とてつもない早い", "キノコの胞子");
+            return Util.itemMeta(Material.MUSIC_DISC_BLOCKS, ChatColor.GOLD + "狙撃銃");
         }
 
         public static ItemStack explodingGun() //爆裂銃
         {
-            return Util.itemMeta(Material.MUSIC_DISC_CHIRP, ChatColor.GOLD + "爆裂銃(仮)",
-                    "この矢には", "世界を滅ぼす", "力がある");
+            return Util.itemMeta(Material.MUSIC_DISC_CHIRP, ChatColor.GOLD + "爆裂銃(仮)");
         }
 
         public static ItemStack flameThrowerGun() //放射器
         {
-            return Util.itemMeta(Material.MUSIC_DISC_FAR, ChatColor.GOLD + "火炎放射器",
-                    "炎がでてくる", "でもよくみると", "赤いきのこ");
+            return Util.itemMeta(Material.MUSIC_DISC_FAR, ChatColor.GOLD + "火炎放射器");
         }
 
         public static ItemStack searchGun() //索敵銃
         {
-            return Util.itemMeta(Material.MUSIC_DISC_MELLOHI, ChatColor.GOLD + "索敵銃",
-                    "アンテナの", "代わりに", "まゆさんヘッド");
+            return Util.itemMeta(Material.MUSIC_DISC_MELLOHI, ChatColor.GOLD + "索敵銃");
         }
 
         public static ItemStack potionGun() //散布銃
         {
-            return Util.itemMeta(Material.MUSIC_DISC_STAL, ChatColor.GOLD + "ポーション散布銃",
-                    "一番", "強い", "銃かもしれない");
+            return Util.itemMeta(Material.MUSIC_DISC_STAL, ChatColor.GOLD + "ポーション散布銃");
         }
 
         public static ItemStack handGun() //小拳銃
         {
-            return Util.itemMeta(Material.MUSIC_DISC_STRAD, ChatColor.GOLD + "拳銃",
-                    "銃ですら", "ないかも", "しれない");
+            return Util.itemMeta(Material.MUSIC_DISC_STRAD, ChatColor.GOLD + "拳銃");
         }
     }
 
@@ -91,11 +83,10 @@ public class GunItem
             Vector vec = p.getEyeLocation().getDirection();
             Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 2, 0), vec, 6F, 2F);
             arrow.setShooter(p);
-            arrow.setColor(Color.fromBGR((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256)));
             arrow.setGravity(true);
             arrow.setCustomName("AutomaticGun");
 
-            p.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 10 * 20);
+            p.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
         }
 
         public static void shotGun(Player p) //散弾銃
@@ -103,15 +94,14 @@ public class GunItem
             p.getWorld().playEffect(p.getLocation(), Effect.BOW_FIRE, 0);
             Vector vec = p.getEyeLocation().getDirection();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 16; i++)
             {
                 Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 2, 0), vec, 2F, 25F);
                 arrow.setShooter(p);
-                arrow.setColor(Color.fromBGR((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256)));
                 arrow.setGravity(false);
                 arrow.setCustomName("ShotGun");
 
-                p.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 20);
+                p.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
             }
         }
 
@@ -132,11 +122,10 @@ public class GunItem
                         Vector vec = p.getEyeLocation().getDirection();
                         Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 2, 0), vec, 10F, 0F);
                         arrow.setShooter(p);
-                        arrow.setColor(Color.BLACK);
                         arrow.setGravity(false);
                         arrow.setCustomName("SniperGun");
 
-                        p.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 10 * 20);
+                        p.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
                         cancel();
                         return;
                     }
@@ -171,11 +160,10 @@ public class GunItem
             Vector vec = player.getEyeLocation().getDirection();
             Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 2, 0), vec, 4F, 1F);
             arrow.setShooter(player);
-            arrow.setColor(Color.fromBGR((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256)));
             arrow.setGravity(false);
             arrow.setCustomName("ExplodingGun");
 
-            player.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 10 * 20);
+            player.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
         }
 
         public static void flameThrowerGun(Player player) //火炎放射器
@@ -220,8 +208,7 @@ public class GunItem
                 return false;
             };
 
-            Collection<Entity> targetList =
-                    targetLocation.getWorld().getNearbyEntities(targetLocation, 20, 20, 20, Predicate);
+            Collection<Entity> targetList = targetLocation.getWorld().getNearbyEntities(targetLocation, 20, 20, 20, Predicate);
             player.getWorld().playEffect(targetLocation, Effect.DRAGON_BREATH, 10, 20);
 
             for (Entity entity : targetList)
@@ -239,9 +226,8 @@ public class GunItem
         {
             player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 0);
             Vector vec = player.getEyeLocation().getDirection();
-            Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 2, 0), vec, 1.5F, 4F);
+            Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 2, 0), vec, 1.5F, 2F);
             arrow.setShooter(player);
-            arrow.setColor(Color.fromBGR((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256)));
             arrow.setGravity(false);
             arrow.setCustomName("PotionGun");
 
@@ -252,15 +238,14 @@ public class GunItem
                     ThrownPotion potion = (ThrownPotion) arrow.getWorld().spawnEntity(arrow.getLocation(), EntityType.SPLASH_POTION);
                     ItemStack itemStack = new ItemStack(Material.SPLASH_POTION);
                     PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
-                    potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.POISON, 20 * 8, 0), true);
+                    potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.POISON, 20 * 5, 0), true);
                     itemStack.setItemMeta(potionMeta);
                     potion.setItem(itemStack);
                     potion.setShooter(player);
-                    arrow.setColor(Color.fromBGR((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256)));
                 }
             }, 5, 5);
 
-            player.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 10 * 20);
+            player.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
         }
 
         public static void handGun(Player player)
@@ -269,11 +254,10 @@ public class GunItem
             Vector vec = player.getEyeLocation().getDirection();
             Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 2, 0), vec, 2F, 2F);
             arrow.setShooter(player);
-            arrow.setColor(Color.BLUE);
             arrow.setGravity(false);
             arrow.setCustomName("HandGun");
 
-            player.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 10 * 20);
+            player.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
         }
     }
 }

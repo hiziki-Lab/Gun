@@ -5,8 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Arrays;
-
 public class Util
 {
     public static Location under(Location loc)
@@ -23,12 +21,11 @@ public class Util
         return loc;
     }
 
-    public static ItemStack itemMeta(Material item, String itemName, String lore1, String lore2, String lore3)
+    public static ItemStack itemMeta(Material item, String itemName)
     {
         ItemStack stack = new ItemStack(item);
         ItemMeta meta = stack.getItemMeta();
         meta.setDisplayName(itemName);
-        meta.setLore(Arrays.asList(lore1, lore2, lore3));
         stack.setItemMeta(meta);
         return stack;
     }
