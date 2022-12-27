@@ -151,7 +151,7 @@ public final class Main extends JavaPlugin implements Listener
     @EventHandler
     public void onPlayerItemHeld(PlayerItemHeldEvent e)
     {
-        if (gameMode == GameGameMode.NONE)
+        if (gameMode != GameGameMode.NONE)
         {
             new BukkitRunnable()
             {
@@ -197,15 +197,18 @@ public final class Main extends JavaPlugin implements Listener
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e)
     {
-        PlayerGunInfo target = getPlayerGunInfo(e.getPlayer());
-        GunItemEnum kind = GunItemEnum.getKind(e.getPlayer());
-
-        if (kind != null)
+        if (gameMode != GameGameMode.NONE)
         {
-            //射撃
-            target.fire(kind);
-            //玉の残段数を表示
-            target.viewBullet();
+            PlayerGunInfo target = getPlayerGunInfo(e.getPlayer());
+            GunItemEnum kind = GunItemEnum.getKind(e.getPlayer());
+
+            if (kind != null)
+            {
+                //射撃
+                target.fire(kind);
+                //玉の残段数を表示
+                target.viewBullet();
+            }
         }
     }
 
