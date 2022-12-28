@@ -1,21 +1,39 @@
 package xyz.hiziki.gun.guns;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import xyz.hiziki.gun.util.Util;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 public enum GunItemEnum
 {
-    AUTOMATIC_GUN(GunItem.Info.automaticGun, 25, 5, 0),
-    SHOT_GUN(GunItem.Info.shotGun, 6, 5, 0.5),
-    SNIPER_GUN(GunItem.Info.sniperGun, 4, 6, 6),
-    ABSORPTION_GUN(GunItem.Info.absorptionGun, 20, 5, 0.25),
-    FLAME_THROWER_GUN(GunItem.Info.flameThrowerGun, 20, 10, 0),
-    SEARCH_GUN(GunItem.Info.searchGun, 10, 10, 10),
-    POTION_GUN(GunItem.Info.potionGun, 10, 5, 1),
-    HAND_GUN(GunItem.Info.handGun, 12, 4, 0.6);
+    AUTOMATIC_GUN(Util.itemMeta(Material.MUSIC_DISC_13, ChatColor.GOLD + "自動小銃"),
+            25, 5, 0),
+
+    SHOT_GUN(Util.itemMeta(Material.MUSIC_DISC_CAT, ChatColor.GOLD + "散弾銃"),
+            6, 5, 0.5),
+
+    SNIPER_GUN(Util.itemMeta(Material.MUSIC_DISC_BLOCKS, ChatColor.GOLD + "狙撃銃"),
+            4, 6, 6),
+
+    ABSORPTION_GUN(Util.itemMeta(Material.MUSIC_DISC_CHIRP, ChatColor.GOLD + "吸収銃"),
+            20, 5, 0.25),
+
+    FLAME_THROWER_GUN(Util.itemMeta(Material.MUSIC_DISC_FAR, ChatColor.GOLD + "火炎放射器"),
+            20, 10, 0),
+
+    SEARCH_GUN(Util.itemMeta(Material.MUSIC_DISC_MELLOHI, ChatColor.GOLD + "索敵銃"),
+            10, 10, 10),
+
+    POTION_GUN(Util.itemMeta(Material.MUSIC_DISC_STAL, ChatColor.GOLD + "ポーション散布銃"),
+            10, 5, 1),
+
+    HAND_GUN(Util.itemMeta(Material.MUSIC_DISC_STRAD, ChatColor.GOLD + "拳銃"),
+            12, 4, 0.6);
 
     private final ItemStack gunItemStack; //アイテム情報
     private final int bullet; //球数
@@ -30,30 +48,30 @@ public enum GunItemEnum
         this.coolDownTime = coolDownTime;
     }
 
-    public ItemStack getGunItemStack()
+    public ItemStack getGunItemStack() //getter
     {
         return gunItemStack;
     }
 
-    public int getBullet()
+    public int getBullet() //getter
     {
         return bullet;
     }
 
-    public int getReloadTime()
+    public int getReloadTime() //getter
     {
         return reloadTime;
     }
 
-    public double getCoolDownTime()
+    public double getCoolDownTime() //getter
     {
         return coolDownTime;
     }
 
-    public static GunItemEnum getKind(Player Player)
+    public static GunItemEnum getKind(Player p) //getter
     {
         return Arrays.stream(GunItemEnum.values()).filter(v -> Objects.equals(v.getGunItemStack(),
-                Player.getInventory().getItemInMainHand())).findFirst().orElse(null);
+                p.getInventory().getItemInMainHand())).findFirst().orElse(null);
     }
 }
 
