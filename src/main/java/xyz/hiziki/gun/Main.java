@@ -315,7 +315,6 @@ public final class Main extends JavaPlugin implements Listener
                     bar.removeAll();
                     BossBarTask.cancel();
                 }
-
             }
         },0,20);
     }
