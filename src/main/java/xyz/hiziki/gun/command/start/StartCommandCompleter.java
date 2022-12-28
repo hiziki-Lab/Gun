@@ -14,10 +14,34 @@ public class StartCommandCompleter implements TabCompleter
     {
         List<String> list = new ArrayList<>(); //List作成
 
-        list.add("team");
-        list.add("survival");
-        list.add("solo");
-
+        switch (args.length)
+        {
+            case 1 ->
+            {
+                list.add("enableRole");
+                list.add("disableRole");
+            }
+            case 2 ->
+            {
+                list.add("team");
+                list.add("survival");
+                list.add("solo");
+            }
+            case 3 ->
+            {
+                list.add("exception_deleteRole");
+                list.add("exception_addRole");
+            }
+            default ->
+            {
+                list.add("Assault_Soldier");
+                list.add("Scout");
+                list.add("Reinforcements");
+                list.add("Sniper");
+                list.add("Destroyer");
+                list.add("special_soldier");
+            }
+        }
         return list; //list
     }
 }
