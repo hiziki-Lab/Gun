@@ -27,11 +27,10 @@ import xyz.hiziki.gun.event.EventManager;
 import xyz.hiziki.gun.guns.GunItemEnum;
 import xyz.hiziki.gun.guns.PlayerGunInfo;
 import xyz.hiziki.gun.util.GameGameMode;
+import xyz.hiziki.gun.util.GameRole;
 import xyz.hiziki.gun.util.ScoreboardSetter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public final class Main extends JavaPlugin implements Listener
 {
@@ -47,6 +46,10 @@ public final class Main extends JavaPlugin implements Listener
 
     public List<PlayerGunInfo> PlayerGunInfoList;
 
+    private static HashMap<Player, GameRole> playerRole;
+
+    private static boolean enableRole;
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
     {
@@ -61,7 +64,7 @@ public final class Main extends JavaPlugin implements Listener
             }
             else
             {
-                switch (args[0])
+                switch (args[1])
                 {
                     case "solo" -> gameMode = GameGameMode.SOLO;
                     case "survival" -> gameMode = GameGameMode.SURVIVAL;
@@ -80,14 +83,36 @@ public final class Main extends JavaPlugin implements Listener
 
             PlayerGunInfoList = new ArrayList<>();
 
-            if (BossBarTask!= null)
+            if (args[0].equalsIgnoreCase("enableRole"))
             {
-                BossBarTask.cancel();
+                enableRole = true;
+
+                for (Player target : getServer().getOnlinePlayers())
+                {
+                    playerRole.put(target, randomLetter());
+
+                    PlayerGunInfoList.add(new PlayerGunInfo(target));
+                }
+            }
+            else if (args[0].equalsIgnoreCase("disableRole"))
+            {
+                enableRole = false;
+
+                for (Player target : getServer().getOnlinePlayers())
+                {
+                    PlayerGunInfoList.add(new PlayerGunInfo(target));
+                }
+            }
+            else
+            {
+                sender.sendMessage("不明なサブコマンドです。");
+                return true;
             }
 
-            for (Player target : getServer().getOnlinePlayers())
+            //その他の設定
+            if (BossBarTask != null)
             {
-                PlayerGunInfoList.add(new PlayerGunInfo(target));
+                BossBarTask.cancel();
             }
 
             if (bar != null)
@@ -132,7 +157,9 @@ public final class Main extends JavaPlugin implements Listener
         plugin = this;
 
         getServer().getPluginManager().registerEvents(this, this);
+
         gameMode = GameGameMode.NONE;
+        playerRole = new HashMap<>();
 
         new CommandManager(plugin);
         new EventManager(plugin);
@@ -172,7 +199,7 @@ public final class Main extends JavaPlugin implements Listener
         if (gameMode != GameGameMode.NONE)
         {
             PlayerGunInfo target = getPlayerGunInfo(e.getPlayer());
-            target.setGun();
+            target.setGun(e.getPlayer());
         }
     }
 
@@ -235,6 +262,12 @@ public final class Main extends JavaPlugin implements Listener
                 }
             }
         }
+    }
+
+    private GameRole randomLetter()
+    {
+        int pick = new Random().nextInt(GameRole.values().length);
+        return GameRole.values()[pick];
     }
 
     //プレイヤーリスト検索
@@ -309,5 +342,15 @@ public final class Main extends JavaPlugin implements Listener
     public static JavaPlugin getPlugin()
     {
         return plugin;
+    }
+
+    public static HashMap<Player, GameRole> getPlayerRole()
+    {
+        return playerRole;
+    }
+
+    public static boolean enableRole()
+    {
+        return enableRole;
     }
 }
