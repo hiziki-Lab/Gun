@@ -1,6 +1,5 @@
 package xyz.hiziki.gun.event.events;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -21,9 +20,20 @@ public class EntityDamageByEntity
                     {
                         case "AutomaticGun", "ShotGun" -> e.setDamage(2);
                         case "SniperGun" -> e.setDamage(16);
-                        case "ExplodingGun" -> Bukkit.getWorld("world").createExplosion(p.getLocation(), 2.0F);
-                        case "PotionGun" -> p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 100, 2));
+                        case "AbsorptionGun" ->
+                        {
+                            e.setDamage(2);
+                            Player shooter = (Player) e.getDamager();
+                            double health = shooter.getHealth();
+                            shooter.setHealth(health + 1);
+                        }
+                        case "PotionGun" ->
+                        {
+                            e.setDamage(0);
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 100, 2));
+                        }
                         case "HandGun" -> e.setDamage(1.5);
+
                     }
                 }
             }
