@@ -11,5 +11,5 @@ public enum GameGameMode
     TEAM,
     SOLO,
     SURVIVAL,
-    NONE;
+    NONE
 }
