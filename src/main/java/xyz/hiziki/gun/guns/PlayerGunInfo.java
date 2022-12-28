@@ -183,14 +183,14 @@ public class PlayerGunInfo
             {
                 switch (this.gunKind)
                 {
-                    case AUTOMATIC_GUN -> GunItem.Event.automaticGun(player);
-                    case SHOT_GUN -> GunItem.Event.shotGun(player);
-                    case SNIPER_GUN -> GunItem.Event.sniperGun(player);
-                    case ABSORPTION_GUN -> GunItem.Event.absorptionGun(player);
-                    case FLAME_THROWER_GUN -> GunItem.Event.flameThrowerGun(player);
-                    case SEARCH_GUN -> GunItem.Event.searchGun(player);
-                    case POTION_GUN -> GunItem.Event.potionGun(player);
-                    case HAND_GUN -> GunItem.Event.handGun(player);
+                    case AUTOMATIC_GUN -> new GunItem().automaticGun(player);
+                    case SHOT_GUN -> new GunItem().shotGun(player);
+                    case SNIPER_GUN -> new GunItem().sniperGun(player);
+                    case ABSORPTION_GUN -> new GunItem().absorptionGun(player);
+                    case FLAME_THROWER_GUN -> new GunItem().flameThrowerGun(player);
+                    case SEARCH_GUN -> new GunItem().searchGun(player);
+                    case POTION_GUN -> new GunItem().potionGun(player);
+                    case HAND_GUN -> new GunItem().handGun(player);
                 }
                 coolDownFlg = true;
                 nowBullet--;
