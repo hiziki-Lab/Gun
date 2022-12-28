@@ -20,13 +20,29 @@ import java.util.function.Predicate;
 
 public class GunItem
 {
-    public static void setGun(Player player)
+    public static void setGun(Player player, List<GunItemEnum> guns)
     {
         Inventory inv = player.getInventory();
 
-        for (GunItemEnum gunItem : GunItemEnum.values())
+        if (Main.enableRole())
         {
-            inv.setItem(gunItem.ordinal(), gunItem.getGunItemStack());
+
+            int count = 0;
+
+            for (GunItemEnum gun : guns)
+            {
+                inv.setItem(count, gun.getGunItemStack());
+
+                count++;
+            }
+        }
+        else
+        {
+
+            for (GunItemEnum gunItem : GunItemEnum.values())
+            {
+                inv.setItem(gunItem.ordinal(), gunItem.getGunItemStack());
+            }
         }
     }
 
@@ -47,9 +63,9 @@ public class GunItem
             return Util.itemMeta(Material.MUSIC_DISC_BLOCKS, ChatColor.GOLD + "狙撃銃");
         }
 
-        public static ItemStack explodingGun() //爆裂銃
+        public static ItemStack absorptionGun() //吸収銃
         {
-            return Util.itemMeta(Material.MUSIC_DISC_CHIRP, ChatColor.GOLD + "爆裂銃(仮)");
+            return Util.itemMeta(Material.MUSIC_DISC_CHIRP, ChatColor.GOLD + "吸収銃");
         }
 
         public static ItemStack flameThrowerGun() //放射器
@@ -81,7 +97,7 @@ public class GunItem
         {
             p.getWorld().playEffect(p.getLocation(), Effect.BOW_FIRE, 0);
             Vector vec = p.getEyeLocation().getDirection();
-            Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 2, 0), vec, 6F, 2F);
+            Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 1.75, 0), vec, 6F, 2F);
             arrow.setShooter(p);
             arrow.setGravity(true);
             arrow.setCustomName("AutomaticGun");
@@ -96,7 +112,7 @@ public class GunItem
 
             for (int i = 0; i < 16; i++)
             {
-                Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 2, 0), vec, 2F, 25F);
+                Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 1.75, 0), vec, 2F, 25F);
                 arrow.setShooter(p);
                 arrow.setGravity(false);
                 arrow.setCustomName("ShotGun");
@@ -120,7 +136,7 @@ public class GunItem
                     {
                         p.getWorld().playEffect(p.getLocation(), Effect.BOW_FIRE, 0);
                         Vector vec = p.getEyeLocation().getDirection();
-                        Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 2, 0), vec, 10F, 0F);
+                        Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 1.75, 0), vec, 10F, 0F);
                         arrow.setShooter(p);
                         arrow.setGravity(false);
                         arrow.setCustomName("SniperGun");
@@ -154,16 +170,17 @@ public class GunItem
             }.runTaskTimer(plugin, 0, 20);
         }
 
-        public static void explodingGun(Player player)
+        public static void absorptionGun(Player p)
         {
-            player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 0);
-            Vector vec = player.getEyeLocation().getDirection();
-            Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 2, 0), vec, 4F, 1F);
-            arrow.setShooter(player);
-            arrow.setGravity(false);
-            arrow.setCustomName("ExplodingGun");
+            p.getWorld().playEffect(p.getLocation(), Effect.BOW_FIRE, 0);
 
-            player.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
+            Vector vec = p.getEyeLocation().getDirection();
+            Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 1.75, 0), vec, 4F, 2F);
+            arrow.setShooter(p);
+            arrow.setGravity(true);
+            arrow.setCustomName("absorptionGun");
+
+            p.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
         }
 
         public static void flameThrowerGun(Player player) //火炎放射器
@@ -226,7 +243,7 @@ public class GunItem
         {
             player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 0);
             Vector vec = player.getEyeLocation().getDirection();
-            Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 2, 0), vec, 1.5F, 2F);
+            Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 1.75, 0), vec, 1.5F, 2F);
             arrow.setShooter(player);
             arrow.setGravity(false);
             arrow.setCustomName("PotionGun");
@@ -252,7 +269,7 @@ public class GunItem
         {
             player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 0);
             Vector vec = player.getEyeLocation().getDirection();
-            Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 2, 0), vec, 2F, 2F);
+            Arrow arrow = player.getWorld().spawnArrow(player.getLocation().add(0, 1.75, 0), vec, 2F, 2F);
             arrow.setShooter(player);
             arrow.setGravity(false);
             arrow.setCustomName("HandGun");

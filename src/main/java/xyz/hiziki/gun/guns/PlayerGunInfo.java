@@ -2,11 +2,13 @@ package xyz.hiziki.gun.guns;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.hiziki.gun.Main;
+import xyz.hiziki.gun.util.GameRole;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,26 +22,46 @@ public class PlayerGunInfo
 
     private final JavaPlugin plugin = Main.getPlugin();
 
-    public PlayerGunInfo(Player Player)
+    public PlayerGunInfo(Player p)
     {
-        player = Player;
+        player = p;
         gunInfoList = new ArrayList<>();
-        this.setGun();
+        setGun(p);
     }
 
-    public void setGun()
+    public void setGun(Player p)
     {
         gunInfoList.clear();
-        for (GunItemEnum kind : GunItemEnum.values())
+
+        List<GunItemEnum> guns = null;
+
+        if (Main.enableRole()) //ロールがonになっていたら
         {
-            gunInfoList.add(new GunInfo(kind));
+            GameRole playerRole = Main.getPlayerRole().get(p);
+
+            guns = GameRole.getRoleGun(playerRole);
+
+            for (GunItemEnum gun : guns)
+            {
+                gunInfoList.add(new GunInfo(gun));
+            }
+            p.sendMessage(ChatColor.AQUA + "あなたのロールは" + playerRole + "です。");
         }
-        GunItem.setGun(player);
+        else //ロールがoffになっていたら
+        {
+            for (GunItemEnum kind : GunItemEnum.values())
+            {
+                gunInfoList.add(new GunInfo(kind));
+            }
+        }
+
+        GunItem.setGun(p, guns);
     }
 
     public String viewBullet(ItemStack item)
     {
         GunInfo guninfo = gunInfoList.stream().filter(v -> Objects.equals(v.gunKind.getGunItemStack(), item)).findFirst().orElse(null);
+
         if (guninfo == null)
         {
             return null;
@@ -65,6 +87,7 @@ public class PlayerGunInfo
     public void reload(GunItemEnum gunKind)
     {
         GunInfo guninfo = gunInfoList.stream().filter(v -> Objects.equals(v.gunKind, gunKind)).findFirst().orElse(null);
+
         if (guninfo.reloadNowFlg)
         {
             return;
@@ -158,7 +181,7 @@ public class PlayerGunInfo
                     case AUTOMATIC_GUN -> GunItem.Event.automaticGun(player);
                     case SHOT_GUN -> GunItem.Event.shotGun(player);
                     case SNIPER_GUN -> GunItem.Event.sniperGun(player);
-                    case EXPLODING_GUN -> GunItem.Event.explodingGun(player);
+                    case ABSORPTION_GUN -> GunItem.Event.absorptionGun(player);
                     case FLAME_THROWER_GUN -> GunItem.Event.flameThrowerGun(player);
                     case SEARCH_GUN -> GunItem.Event.searchGun(player);
                     case POTION_GUN -> GunItem.Event.potionGun(player);
