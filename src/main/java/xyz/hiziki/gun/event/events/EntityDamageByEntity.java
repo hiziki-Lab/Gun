@@ -30,13 +30,16 @@ public class EntityDamageByEntity
                         case "PotionGun" ->
                         {
                             e.setDamage(0);
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 100, 2));
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 40, 5));
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40, 5));
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 5));
                         }
                         case "HandGun" -> e.setDamage(1.5);
 
                     }
                 }
             }
+            p.setNoDamageTicks(-1);
         }
     }
 }
