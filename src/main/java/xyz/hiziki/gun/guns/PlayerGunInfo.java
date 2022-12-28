@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.hiziki.gun.Main;
@@ -33,31 +34,35 @@ public class PlayerGunInfo
     {
         gunInfoList.clear();
 
-        List<GunItemEnum> guns = null;
+        List<GunItemEnum> guns;
+        Inventory inv = p.getInventory();
 
         if (Main.enableRole()) //ロールがonになっていたら
         {
             GameRole playerRole = Main.getPlayerRole().get(p);
 
             guns = GameRole.getRoleGun(playerRole);
+            int count = 0;
 
             for (GunItemEnum gun : guns)
             {
+                count++;
+
                 gunInfoList.add(new GunInfo(gun));
+                inv.setItem(count, gun.getGunItemStack());
             }
+
             p.sendMessage(ChatColor.AQUA + "あなたのロールは" + playerRole + "です。");
         }
         else //ロールがoffになっていたら
         {
-            for (GunItemEnum kind : GunItemEnum.values())
+            for (GunItemEnum gun : GunItemEnum.values())
             {
-                gunInfoList.add(new GunInfo(kind));
+                gunInfoList.add(new GunInfo(gun));
+                inv.setItem(gun.ordinal(), gun.getGunItemStack());
             }
         }
-
-        GunItem.setGun(p, guns);
     }
-
     public String viewBullet(ItemStack item)
     {
         GunInfo guninfo = gunInfoList.stream().filter(v -> Objects.equals(v.gunKind.getGunItemStack(), item)).findFirst().orElse(null);

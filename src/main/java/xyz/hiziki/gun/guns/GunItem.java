@@ -3,7 +3,6 @@ package xyz.hiziki.gun.guns;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,73 +19,16 @@ import java.util.function.Predicate;
 
 public class GunItem
 {
-    public static void setGun(Player player, List<GunItemEnum> guns)
-    {
-        Inventory inv = player.getInventory();
-
-        if (Main.enableRole())
-        {
-
-            int count = 0;
-
-            for (GunItemEnum gun : guns)
-            {
-                inv.setItem(count, gun.getGunItemStack());
-
-                count++;
-            }
-        }
-        else
-        {
-
-            for (GunItemEnum gunItem : GunItemEnum.values())
-            {
-                inv.setItem(gunItem.ordinal(), gunItem.getGunItemStack());
-            }
-        }
-    }
-
     public static class Info
     {
-        public static ItemStack automaticGun() //自小銃
-        {
-            return Util.itemMeta(Material.MUSIC_DISC_13, ChatColor.GOLD + "自動小銃");
-        }
-
-        public static ItemStack shotGun() //散弾銃
-        {
-            return Util.itemMeta(Material.MUSIC_DISC_CAT, ChatColor.GOLD + "散弾銃");
-        }
-
-        public static ItemStack sniperGun() //狙撃銃
-        {
-            return Util.itemMeta(Material.MUSIC_DISC_BLOCKS, ChatColor.GOLD + "狙撃銃");
-        }
-
-        public static ItemStack absorptionGun() //吸収銃
-        {
-            return Util.itemMeta(Material.MUSIC_DISC_CHIRP, ChatColor.GOLD + "吸収銃");
-        }
-
-        public static ItemStack flameThrowerGun() //放射器
-        {
-            return Util.itemMeta(Material.MUSIC_DISC_FAR, ChatColor.GOLD + "火炎放射器");
-        }
-
-        public static ItemStack searchGun() //索敵銃
-        {
-            return Util.itemMeta(Material.MUSIC_DISC_MELLOHI, ChatColor.GOLD + "索敵銃");
-        }
-
-        public static ItemStack potionGun() //散布銃
-        {
-            return Util.itemMeta(Material.MUSIC_DISC_STAL, ChatColor.GOLD + "ポーション散布銃");
-        }
-
-        public static ItemStack handGun() //小拳銃
-        {
-            return Util.itemMeta(Material.MUSIC_DISC_STRAD, ChatColor.GOLD + "拳銃");
-        }
+        public static ItemStack automaticGun = Util.itemMeta(Material.MUSIC_DISC_13, ChatColor.GOLD + "自動小銃");
+        public static ItemStack shotGun = Util.itemMeta(Material.MUSIC_DISC_CAT, ChatColor.GOLD + "散弾銃");
+        public static ItemStack sniperGun = Util.itemMeta(Material.MUSIC_DISC_BLOCKS, ChatColor.GOLD + "狙撃銃");
+        public static ItemStack absorptionGun = Util.itemMeta(Material.MUSIC_DISC_CHIRP, ChatColor.GOLD + "吸収銃");
+        public static ItemStack flameThrowerGun = Util.itemMeta(Material.MUSIC_DISC_FAR, ChatColor.GOLD + "火炎放射器");
+        public static ItemStack searchGun = Util.itemMeta(Material.MUSIC_DISC_MELLOHI, ChatColor.GOLD + "索敵銃");
+        public static ItemStack potionGun = Util.itemMeta(Material.MUSIC_DISC_STAL, ChatColor.GOLD + "ポーション散布銃");
+        public static ItemStack handGun = Util.itemMeta(Material.MUSIC_DISC_STRAD, ChatColor.GOLD + "拳銃");
     }
 
     public static class Event
