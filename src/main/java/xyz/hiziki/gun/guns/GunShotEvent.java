@@ -23,35 +23,35 @@ public class GunShotEvent
 
     private int count;
 
-    public void automaticGun(Player p)
+    public void automaticGun(Player shooter) //自動小銃
     {
-        p.getWorld().playEffect(p.getLocation(), Effect.BOW_FIRE, 0);
-        Vector vec = p.getEyeLocation().getDirection();
-        Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 1.75, 0), vec, 6F, 2F);
-        arrow.setShooter(p);
+        shooter.getWorld().playEffect(shooter.getLocation(), Effect.BOW_FIRE, 0);
+        Vector vec = shooter.getEyeLocation().getDirection();
+        Arrow arrow = shooter.getWorld().spawnArrow(shooter.getLocation().add(0, 1.75, 0), vec, 6F, 2F);
+        arrow.setShooter(shooter);
         arrow.setGravity(true);
-        arrow.setCustomName("AutomaticGun");
+        arrow.setCustomName("automaticGun");
 
-        p.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
+        shooter.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
     }
 
-    public void shotGun(Player p) //散弾銃
+    public void shotGun(Player shooter) //散弾銃
     {
-        p.getWorld().playEffect(p.getLocation(), Effect.BOW_FIRE, 0);
-        Vector vec = p.getEyeLocation().getDirection();
+        shooter.getWorld().playEffect(shooter.getLocation(), Effect.BOW_FIRE, 0);
+        Vector vec = shooter.getEyeLocation().getDirection();
 
         for (int i = 0; i < 16; i++)
         {
-            Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 1.75, 0), vec, 2F, 25F);
-            arrow.setShooter(p);
+            Arrow arrow = shooter.getWorld().spawnArrow(shooter.getLocation().add(0, 1.75, 0), vec, 4F, 25F);
+            arrow.setShooter(shooter);
             arrow.setGravity(false);
-            arrow.setCustomName("ShotGun");
+            arrow.setCustomName("shotGun");
 
-            p.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
+            shooter.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
         }
     }
 
-    public void sniperGun(Player p)
+    public void sniperGun(Player shooter) //狙撃銃
     {
         count = 5;
 
@@ -62,62 +62,62 @@ public class GunShotEvent
             {
                 if (count == 0)
                 {
-                    p.getWorld().playEffect(p.getLocation(), Effect.BOW_FIRE, 0);
-                    Vector vec = p.getEyeLocation().getDirection();
-                    Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 1.75, 0), vec, 16F, 0F);
-                    arrow.setShooter(p);
+                    shooter.getWorld().playEffect(shooter.getLocation(), Effect.BOW_FIRE, 0);
+                    Vector vec = shooter.getEyeLocation().getDirection();
+                    Arrow arrow = shooter.getWorld().spawnArrow(shooter.getLocation().add(0, 1.75, 0), vec, 10F, 0F);
+                    arrow.setShooter(shooter);
                     arrow.setGravity(true);
-                    arrow.setCustomName("SniperGun");
+                    arrow.setCustomName("sniperGun");
 
-                    p.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
+                    shooter.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
                     cancel();
                     return;
                 }
                 else if (count == 1)
                 {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 5));
+                    shooter.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 5));
                 }
                 else if (count == 2)
                 {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 4));
+                    shooter.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 4));
                 }
                 else if (count == 3)
                 {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 3));
+                    shooter.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 3));
                 }
                 else if (count == 4)
                 {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 2));
+                    shooter.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 2));
                 }
                 else if (count == 5)
                 {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 1));
+                    shooter.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 1));
                 }
                 count--;
             }
         }.runTaskTimer(plugin, 0, 10);
     }
 
-    public void absorptionGun(Player p)
+    public void absorptionGun(Player shooter) //未定
     {
-        p.getWorld().playEffect(p.getLocation(), Effect.BOW_FIRE, 0);
+        shooter.getWorld().playEffect(shooter.getLocation(), Effect.BOW_FIRE, 0);
 
-        Vector vec = p.getEyeLocation().getDirection();
-        Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 1.75, 0), vec, 4F, 2F);
-        arrow.setShooter(p);
+        Vector vec = shooter.getEyeLocation().getDirection();
+        Arrow arrow = shooter.getWorld().spawnArrow(shooter.getLocation().add(0, 1.75, 0), vec, 4F, 2F);
+        arrow.setShooter(shooter);
         arrow.setGravity(true);
         arrow.setCustomName("absorptionGun");
 
-        p.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
+        shooter.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
     }
 
-    public void flameThrowerGun(Player p) //火炎放射器
+    public void flameThrowerGun(Player shooter) //火炎放射器
     {
-        p.getWorld().playEffect(p.getLocation(), Effect.BLAZE_SHOOT, 0);
-        Vector vec = p.getEyeLocation().getDirection();
+        shooter.getWorld().playEffect(shooter.getLocation(), Effect.BLAZE_SHOOT, 0);
+        Vector vec = shooter.getEyeLocation().getDirection();
 
-        SmallFireball fireball = p.getWorld().spawn(p.getEyeLocation().add(0, 0.5, 0), SmallFireball.class);
-        fireball.setShooter(p);
+        SmallFireball fireball = shooter.getWorld().spawn(shooter.getEyeLocation().add(0, 0.5, 0), SmallFireball.class);
+        fireball.setShooter(shooter);
         fireball.setGravity(true);
         fireball.setVelocity(vec);
 
@@ -126,21 +126,21 @@ public class GunShotEvent
             @Override
             public void run()
             {
-                SmallFireball fireball = p.getWorld().spawn(p.getEyeLocation().add(0, 0.5, 0), SmallFireball.class);
-                fireball.setShooter(p);
+                SmallFireball fireball = shooter.getWorld().spawn(shooter.getEyeLocation().add(0, 0.5, 0), SmallFireball.class);
+                fireball.setShooter(shooter);
                 fireball.setGravity(false);
                 fireball.setVelocity(vec);
 
-                p.getServer().getScheduler().runTaskLater(plugin, fireball :: remove, 10);
+                shooter.getServer().getScheduler().runTaskLater(plugin, fireball :: remove, 10);
             }
         }.runTaskLater(plugin, 3);
 
-        p.getServer().getScheduler().runTaskLater(plugin, fireball :: remove, 10);
+        shooter.getServer().getScheduler().runTaskLater(plugin, fireball :: remove, 10);
     }
 
-    public void searchGun(Player p) //
+    public void searchGun(Player shooter) //索敵銃
     {
-        List<Block> blockList = p.getLineOfSight(null, 100);
+        List<Block> blockList = shooter.getLineOfSight(null, 100);
         Location BlockLocation = blockList.get(blockList.size() - 1).getLocation();
         Location targetLocation = Util.under(BlockLocation);
 
@@ -148,13 +148,13 @@ public class GunShotEvent
         {
             if (entity.getType() == EntityType.PLAYER)
             {
-                return !entity.getName().equals(p.getName());
+                return !entity.getName().equals(shooter.getName());
             }
             return false;
         };
 
         Collection<Entity> targetList = targetLocation.getWorld().getNearbyEntities(targetLocation, 20, 20, 20, Predicate);
-        p.getWorld().playEffect(targetLocation, Effect.DRAGON_BREATH, 10, 20);
+        shooter.getWorld().playEffect(targetLocation, Effect.DRAGON_BREATH, 10, 20);
 
         for (Entity entity : targetList)
         {
@@ -167,16 +167,16 @@ public class GunShotEvent
         }
     }
 
-    public void potionGun(Player p) //ポーション散布銃
+    public void potionGun(Player shooter) //ポーション散布銃
     {
-        p.getWorld().playEffect(p.getLocation(), Effect.BOW_FIRE, 0);
-        Vector vec = p.getEyeLocation().getDirection();
-        Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 1.75, 0), vec, 1.5F, 2F);
-        arrow.setShooter(p);
+        shooter.getWorld().playEffect(shooter.getLocation(), Effect.BOW_FIRE, 0);
+        Vector vec = shooter.getEyeLocation().getDirection();
+        Arrow arrow = shooter.getWorld().spawnArrow(shooter.getLocation().add(0, 1.75, 0), vec, 2F, 2F);
+        arrow.setShooter(shooter);
         arrow.setGravity(true);
-        arrow.setCustomName("PotionGun");
+        arrow.setCustomName("potionGun");
 
-        p.getServer().getScheduler().runTaskTimer(plugin, () ->
+        shooter.getServer().getScheduler().runTaskTimer(plugin, () ->
         {
             if (!arrow.isDead())
             {
@@ -186,22 +186,22 @@ public class GunShotEvent
                 potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.POISON, 20 * 5, 0), true);
                 itemStack.setItemMeta(potionMeta);
                 potion.setItem(itemStack);
-                potion.setShooter(p);
+                potion.setShooter(shooter);
             }
         }, 5, 5);
 
-        p.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
+        shooter.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
     }
 
-    public void handGun(Player p)
+    public void handGun(Player shooter) //拳銃
     {
-        p.getWorld().playEffect(p.getLocation(), Effect.BOW_FIRE, 0);
-        Vector vec = p.getEyeLocation().getDirection();
-        Arrow arrow = p.getWorld().spawnArrow(p.getLocation().add(0, 1.75, 0), vec, 3F, 2F);
-        arrow.setShooter(p);
+        shooter.getWorld().playEffect(shooter.getLocation(), Effect.BOW_FIRE, 0);
+        Vector vec = shooter.getEyeLocation().getDirection();
+        Arrow arrow = shooter.getWorld().spawnArrow(shooter.getLocation().add(0, 1.75, 0), vec, 3F, 2F);
+        arrow.setShooter(shooter);
         arrow.setGravity(true);
-        arrow.setCustomName("HandGun");
+        arrow.setCustomName("handGun");
 
-        p.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
+        shooter.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
     }
 }
