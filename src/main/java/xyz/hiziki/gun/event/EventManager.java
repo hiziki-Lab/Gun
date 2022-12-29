@@ -10,7 +10,7 @@ import xyz.hiziki.gun.event.events.PlayerDeath;
 
 public class EventManager implements Listener
 {
-    public EventManager(JavaPlugin plugin) //コンストラクター
+    public EventManager(JavaPlugin plugin) //コンストラクタ
     {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }

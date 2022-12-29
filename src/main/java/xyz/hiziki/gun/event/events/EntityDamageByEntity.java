@@ -15,7 +15,7 @@ public class EntityDamageByEntity
 {
     private final JavaPlugin plugin = Main.getPlugin();
 
-    public EntityDamageByEntity(EntityDamageByEntityEvent e)
+    public EntityDamageByEntity(EntityDamageByEntityEvent e) //コンストラクタ
     {
         playerHitBullet(e);
     }
