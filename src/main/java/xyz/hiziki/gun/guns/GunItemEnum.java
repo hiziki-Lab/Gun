@@ -15,10 +15,10 @@ public enum GunItemEnum
             25, 5, 0),
 
     SHOT_GUN(Util.itemMeta(Material.MUSIC_DISC_CAT, ChatColor.GOLD + "散弾銃"),
-            6, 5, 0.5),
+            5, 5, 0.5),
 
     SNIPER_GUN(Util.itemMeta(Material.MUSIC_DISC_BLOCKS, ChatColor.GOLD + "狙撃銃"),
-            4, 6, 6),
+            5, 5, 5),
 
     ABSORPTION_GUN(Util.itemMeta(Material.MUSIC_DISC_CHIRP, ChatColor.GOLD + "吸収銃"),
             20, 5, 0.25),
