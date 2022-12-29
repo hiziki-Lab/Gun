@@ -1,6 +1,5 @@
 package xyz.hiziki.gun.util;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
@@ -8,67 +7,23 @@ import org.bukkit.scoreboard.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ScoreboardSetter
 {
-    enum TeamKindEnum
-    {
-        Red("team_red","赤",ChatColor.RED),
-        Blue("team_blue","青",ChatColor.BLUE);
-
-        private final String TeamName;
-        private final String ViewTeamName;
-        private final ChatColor TeamColor;
-
-        TeamKindEnum(String _TeamName,String _ViewTeamName, ChatColor _TeamColor)
-        {
-            this.TeamName = _TeamName;
-            this.ViewTeamName = _ViewTeamName;
-            this.TeamColor = _TeamColor;
-        }
-
-        public String getTeamName()
-        {
-            return TeamName;
-        }
-
-        public String getViewTeamName()
-        {
-            return ViewTeamName + "チーム";
-        }
-
-        public ChatColor getTeamColor()
-        {
-            return TeamColor;
-        }
-
-        public String getPrefix()
-        {
-            return "【"+this.getViewTeamName()+"】";
-        }
-
-        public static TeamKindEnum GetEnum(String TeamName)
-        {
-            for (TeamKindEnum team: TeamKindEnum.values() )
-            {
-                if(team.getTeamName().equals(TeamName)) return team;
-            }
-            return null;
-        }
-    }
-
     public List<Team> teams;
 
     public List<Score> scoreList;
 
     public Scoreboard ScoreBord;
+
     private List<String> tmpPlayerNameList;
 
     public ScoreboardSetter(Server server)
     {
         ScoreboardManager manager = server.getScoreboardManager();
+
         ScoreBord = manager.getMainScoreboard();
         ScoreBord.clearSlot(DisplaySlot.SIDEBAR);
+
         teams = new ArrayList<>();
 
         for (Team team : ScoreBord.getTeams())
@@ -81,7 +36,7 @@ public class ScoreboardSetter
 
         for (TeamKindEnum team : TeamKindEnum.values())
         {
-            if(ScoreBord.getTeam(team.getTeamName()) == null)
+            if (ScoreBord.getTeam(team.getTeamName()) == null)
             {
                 Team tmpTeam = ScoreBord.registerNewTeam(team.getTeamName());
                 tmpTeam.setColor(team.getTeamColor());
@@ -100,13 +55,13 @@ public class ScoreboardSetter
             tmpPlayerNameList.add(player.getName());
         }
 
-        FirstSetScoreView();
-        SetTeamMember();
+        firstSetScoreView();
+        setTeamMember();
     }
 
-    public void SetTeamMember()
+    public void setTeamMember()
     {
-        for (Team team: teams)
+        for (Team team : teams)
         {
             for (String tmp : team.getEntries())
             {
@@ -125,7 +80,7 @@ public class ScoreboardSetter
         }
     }
 
-    public void FirstSetScoreView()
+    public void firstSetScoreView()
     {
         Objective objective = ScoreBord.getObjective("GunScore");
 
@@ -139,7 +94,7 @@ public class ScoreboardSetter
 
         scoreList = new ArrayList<>();
 
-        for (TeamKindEnum team: TeamKindEnum.values())
+        for (TeamKindEnum team : TeamKindEnum.values())
         {
             Score tmpScore = objective.getScore(team.getTeamColor() + team.getViewTeamName()+"：");
             tmpScore.setScore(0);
@@ -147,25 +102,25 @@ public class ScoreboardSetter
         }
     }
 
-    public void PointCheck(Player Killer, Player target)
+    public void pointCheck(Player Killer, Player target)
     {
-        for (Team team: teams)
+        for (Team team : teams)
         {
             if (team.hasEntry(Killer.getName()))
             {
                 if (team.hasEntry(target.getName()))
                 {
-                    TeamPoint(TeamKindEnum.GetEnum(team.getName()), -1);
+                    teamPoint(TeamKindEnum.getEnum(team.getName()), -1);
                 }
                 else
                 {
-                    TeamPoint(TeamKindEnum.GetEnum(team.getName()), 1);
+                    teamPoint(TeamKindEnum.getEnum(team.getName()), 1);
                 }
             }
         }
     }
 
-    public void TeamPoint(TeamKindEnum TeamKind, int count)
+    public void teamPoint(TeamKindEnum TeamKind, int count)
     {
         int tmp = scoreList.get(TeamKind.ordinal()).getScore();
         tmp = tmp + count;
