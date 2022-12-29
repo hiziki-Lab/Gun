@@ -1,4 +1,4 @@
-package xyz.hiziki.gun.guns;
+package xyz.hiziki.gun.gun;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;

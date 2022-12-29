@@ -1,6 +1,6 @@
-package xyz.hiziki.gun.util;
+package xyz.hiziki.gun.role;
 
-import xyz.hiziki.gun.guns.GunItemEnum;
+import xyz.hiziki.gun.gun.GunItemEnum;
 
 import java.util.ArrayList;
 import java.util.List;
