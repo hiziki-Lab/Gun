@@ -75,23 +75,23 @@ public class GunShotEvent
                 }
                 else if (count == 1)
                 {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 5));
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 5));
                 }
                 else if (count == 2)
                 {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 4));
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 4));
                 }
                 else if (count == 3)
                 {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 3));
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 3));
                 }
                 else if (count == 4)
                 {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 2));
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 2));
                 }
                 else if (count == 5)
                 {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 1));
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 1));
                 }
                 count--;
             }
