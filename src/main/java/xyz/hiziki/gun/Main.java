@@ -64,10 +64,10 @@ public final class Main extends JavaPlugin implements Listener
             }
             else
             {
-                switch (args[1])
+                switch (args[0])
                 {
                     case "solo" -> gameMode = GameGameMode.SOLO;
-                    case "survival" -> gameMode = GameGameMode.SURVIVAL;
+                    case "oneLife" -> gameMode = GameGameMode.SURVIVAL;
                     case "team" ->
                     {
                         scoreBoard = new ScoreboardSetter(getServer());
@@ -83,20 +83,10 @@ public final class Main extends JavaPlugin implements Listener
 
             gunInfoPlayerList = new ArrayList<>();
 
-            if (args[0].equalsIgnoreCase("enableRole"))
+            for (Player target : getServer().getOnlinePlayers())
             {
-                for (Player target : getServer().getOnlinePlayers())
-                {
-                    playerRole.put(target, randomLetter());
-                    gunInfoPlayerList.add(new GunInfoPlayer(target));
-
-
-                }
-            }
-            else
-            {
-                sender.sendMessage("不明なサブコマンドです。");
-                return true;
+                playerRole.put(target, randomLetter());
+                gunInfoPlayerList.add(new GunInfoPlayer(target));
             }
 
             //その他の設定
