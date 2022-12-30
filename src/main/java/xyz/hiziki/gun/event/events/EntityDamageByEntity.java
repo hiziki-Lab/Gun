@@ -22,7 +22,7 @@ public class EntityDamageByEntity
 
     private void playerHitBullet(EntityDamageByEntityEvent e)
     {
-        if (e.getEntity() instanceof LivingEntity p)
+        if (e.getEntity() instanceof Player p)
         {
             if (e.getDamager() instanceof Arrow arrow)
             {
@@ -30,8 +30,7 @@ public class EntityDamageByEntity
                 {
                     switch (arrow.getCustomName())
                     {
-                        case "automaticGun" -> e.setDamage(2);
-                        case "shotGun" -> e.setDamage(1);
+                        case "automaticGun", "shotGun" -> e.setDamage(2);
                         case "sniperGun" -> e.setDamage(16);
                         case "absorptionGun" -> e.setDamage(3);
                         case "searchGun" ->
