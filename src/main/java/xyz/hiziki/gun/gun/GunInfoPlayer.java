@@ -45,14 +45,12 @@ public class GunInfoPlayer
 
         for (GunEnum gun : guns)
         {
-            count++;
-
             gunInfoList.add(new GunInfoPlayer.GunInfo(gun));
             inv.setItem(count, gun.getGunItemStack());
+
+            count++;
         }
-
         player.sendMessage(ChatColor.AQUA + "あなたのロールは" + playerRole + "です。");
-
     }
 
     public String bullet(ItemStack item)
