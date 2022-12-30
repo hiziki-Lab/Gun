@@ -10,7 +10,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.hiziki.gun.Main;
-import xyz.hiziki.gun.util.GameRole;
+import xyz.hiziki.gun.role.RoleEnum;
 
 import java.util.Random;
 
@@ -27,9 +27,9 @@ public class PlayerDeath
 
         if (en instanceof Player killer)
         {
-            GameRole playerRole = Main.getPlayerRole().get(killer);
+            RoleEnum playerRole = Main.getPlayerRole().get(killer);
 
-            if (playerRole == GameRole.DESTROYER)
+            if (playerRole == RoleEnum.DESTROYER)
             {
                 Random random = new Random();
                 int num = random.nextInt(5) + 1;

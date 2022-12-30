@@ -18,17 +18,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import xyz.hiziki.gun.command.CommandManager;
 import xyz.hiziki.gun.event.EventManager;
-import xyz.hiziki.gun.guns.GunItemEnum;
-import xyz.hiziki.gun.guns.PlayerGunInfo;
+import xyz.hiziki.gun.gun.GunEnum;
+import xyz.hiziki.gun.gun.GunInfoPlayer;
+import xyz.hiziki.gun.role.RoleInfoPlayer;
 import xyz.hiziki.gun.util.GameGameMode;
-import xyz.hiziki.gun.util.GameRole;
-import xyz.hiziki.gun.util.ScoreboardSetter;
+import xyz.hiziki.gun.role.RoleEnum;
+import xyz.hiziki.gun.team.ScoreboardSetter;
 
 import java.util.*;
 
@@ -44,11 +44,11 @@ public final class Main extends JavaPlugin implements Listener
 
     public ScoreboardSetter scoreBoard;
 
-    public List<PlayerGunInfo> PlayerGunInfoList;
+    public List<GunInfoPlayer> gunInfoPlayerList;
 
-    private static HashMap<Player, GameRole> playerRole;
+    public List<RoleInfoPlayer> roleInfoPlayerList;
 
-    private static boolean enableRole;
+    private static HashMap<Player, RoleEnum> playerRole;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
@@ -81,26 +81,16 @@ public final class Main extends JavaPlugin implements Listener
                 }
             }
 
-            PlayerGunInfoList = new ArrayList<>();
+            gunInfoPlayerList = new ArrayList<>();
 
             if (args[0].equalsIgnoreCase("enableRole"))
             {
-                enableRole = true;
-
                 for (Player target : getServer().getOnlinePlayers())
                 {
                     playerRole.put(target, randomLetter());
+                    gunInfoPlayerList.add(new GunInfoPlayer(target));
 
-                    PlayerGunInfoList.add(new PlayerGunInfo(target));
-                }
-            }
-            else if (args[0].equalsIgnoreCase("disableRole"))
-            {
-                enableRole = false;
 
-                for (Player target : getServer().getOnlinePlayers())
-                {
-                    PlayerGunInfoList.add(new PlayerGunInfo(target));
                 }
             }
             else
@@ -184,7 +174,7 @@ public final class Main extends JavaPlugin implements Listener
             {
                 @Override public void run()
                 {
-                    PlayerGunInfo target = getPlayerGunInfo(e.getPlayer());
+                    GunInfoPlayer target = getPlayerGunInfo(e.getPlayer());
                     //玉の残段数を表示
                     target.viewBullet();
                 }
@@ -194,22 +184,12 @@ public final class Main extends JavaPlugin implements Listener
     }
 
     @EventHandler
-    public void onPlayerRespawn(PlayerRespawnEvent e)
-    {
-        if (gameMode != GameGameMode.NONE)
-        {
-            PlayerGunInfo target = getPlayerGunInfo(e.getPlayer());
-            target.setGun(e.getPlayer());
-        }
-    }
-
-    @EventHandler
     public void onPlayerToggleSneak(PlayerToggleSneakEvent e)
     {
         if (gameMode != GameGameMode.NONE)
         {
-            PlayerGunInfo target = getPlayerGunInfo(e.getPlayer());
-            GunItemEnum kind = GunItemEnum.getKind(e.getPlayer());
+            GunInfoPlayer target = getPlayerGunInfo(e.getPlayer());
+            GunEnum kind = GunEnum.getKind(e.getPlayer());
 
             if (kind != null)
             {
@@ -226,8 +206,8 @@ public final class Main extends JavaPlugin implements Listener
     {
         if (gameMode != GameGameMode.NONE)
         {
-            PlayerGunInfo target = getPlayerGunInfo(e.getPlayer());
-            GunItemEnum kind = GunItemEnum.getKind(e.getPlayer());
+            GunInfoPlayer target = getPlayerGunInfo(e.getPlayer());
+            GunEnum kind = GunEnum.getKind(e.getPlayer());
 
             if (kind != null)
             {
@@ -251,7 +231,7 @@ public final class Main extends JavaPlugin implements Listener
                     switch (gameMode)
                     {
                         case TEAM :
-                            scoreBoard.PointCheck(e.getEntity().getKiller().getPlayer(), e.getEntity());
+                            scoreBoard.pointCheck(e.getEntity().getKiller().getPlayer(), e.getEntity());
                             break;
                         case SOLO:
                             break;
@@ -264,16 +244,16 @@ public final class Main extends JavaPlugin implements Listener
         }
     }
 
-    private GameRole randomLetter()
+    private RoleEnum randomLetter()
     {
-        int pick = new Random().nextInt(GameRole.values().length);
-        return GameRole.values()[pick];
+        int pick = new Random().nextInt(RoleEnum.values().length);
+        return RoleEnum.values()[pick];
     }
 
     //プレイヤーリスト検索
-    private PlayerGunInfo getPlayerGunInfo(Player Player)
+    private GunInfoPlayer getPlayerGunInfo(Player Player)
     {
-        return PlayerGunInfoList.stream().filter(v ->
+        return gunInfoPlayerList.stream().filter(v ->
                 Objects.equals(v.player.getUniqueId(), Player.getUniqueId())).findFirst().orElse(null);
     }
 
@@ -282,7 +262,7 @@ public final class Main extends JavaPlugin implements Listener
         //画面上記のBar設定
         bar = getServer().createBossBar("戦争時間", BarColor.BLUE, BarStyle.SEGMENTED_6, BarFlag.CREATE_FOG);
         bar.setProgress(1);
-        for (PlayerGunInfo target : PlayerGunInfoList)
+        for (GunInfoPlayer target : gunInfoPlayerList)
         {
             bar.addPlayer(target.player);
         }
@@ -301,7 +281,7 @@ public final class Main extends JavaPlugin implements Listener
 
                 if(tmp < 0)
                 {
-                    for (PlayerGunInfo target : PlayerGunInfoList)
+                    for (GunInfoPlayer target : gunInfoPlayerList)
                     {
                         gameMode = GameGameMode.NONE;
                         target.player.sendTitle("終了です！！", "お疲れ様です。", 20, 200, 20);
@@ -343,13 +323,8 @@ public final class Main extends JavaPlugin implements Listener
         return plugin;
     }
 
-    public static HashMap<Player, GameRole> getPlayerRole()
+    public static HashMap<Player, RoleEnum> getPlayerRole()
     {
         return playerRole;
-    }
-
-    public static boolean enableRole()
-    {
-        return enableRole;
     }
 }
