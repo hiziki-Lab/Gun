@@ -9,13 +9,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.hiziki.gun.Main;
-import xyz.hiziki.gun.role.GameRole;
+import xyz.hiziki.gun.role.RoleEnum;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PlayerGunInfo
+public class GunInfoPlayer
 {
     public List<GunInfo> gunInfoList;
 
@@ -23,7 +23,7 @@ public class PlayerGunInfo
 
     private final JavaPlugin plugin = Main.getPlugin();
 
-    public PlayerGunInfo(Player _player)
+    public GunInfoPlayer(Player _player)
     {
         player = _player;
         gunInfoList = new ArrayList<>();
@@ -34,20 +34,20 @@ public class PlayerGunInfo
     {
         gunInfoList.clear();
 
-        List<GunItemEnum> guns;
+        List<GunEnum> guns;
         Inventory inv = player.getInventory();
 
-        GameRole playerRole = Main.getPlayerRole().get(player);
+        RoleEnum playerRole = Main.getPlayerRole().get(player);
 
-        guns = GameRole.getRoleGun(playerRole);
+        guns = RoleEnum.getRoleGun(playerRole);
 
         int count = 0;
 
-        for (GunItemEnum gun : guns)
+        for (GunEnum gun : guns)
         {
             count++;
 
-            gunInfoList.add(new PlayerGunInfo.GunInfo(gun));
+            gunInfoList.add(new GunInfoPlayer.GunInfo(gun));
             inv.setItem(count, gun.getGunItemStack());
         }
 
@@ -55,7 +55,7 @@ public class PlayerGunInfo
 
     }
 
-    public String viewBullet(ItemStack item)
+    public String bullet(ItemStack item)
     {
         GunInfo guninfo = gunInfoList.stream().filter(v -> Objects.equals(v.gunKind.getGunItemStack(), item)).findFirst().orElse(null);
 
@@ -74,14 +74,14 @@ public class PlayerGunInfo
         }
     }
 
-    public void fire(GunItemEnum gunKind)
+    public void fire(GunEnum gunKind)
     {
         GunInfo guninfo = gunInfoList.stream().filter(v -> Objects.equals(v.gunKind, gunKind)).findFirst().orElse(null);
         guninfo.fire(player);
-        this.coolDown(guninfo);
+        coolDown(guninfo);
     }
 
-    public void reload(GunItemEnum gunKind)
+    public void reload(GunEnum gunKind)
     {
         GunInfo guninfo = gunInfoList.stream().filter(v -> Objects.equals(v.gunKind, gunKind)).findFirst().orElse(null);
 
@@ -117,11 +117,14 @@ public class PlayerGunInfo
 
     public void viewBullet()
     {
-        String tmp = this.viewBullet(player.getInventory().getItemInMainHand());
-        if (tmp == null) return;
-        TextComponent component = new TextComponent();
-        component.setText(tmp);
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
+        String tmp = bullet(player.getInventory().getItemInMainHand());
+
+        if (tmp != null)
+        {
+            TextComponent component = new TextComponent();
+            component.setText(tmp);
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
+        }
     }
 
     private void coolDown(GunInfo gunInfo)
@@ -146,7 +149,7 @@ public class PlayerGunInfo
 
     public static class GunInfo
     {
-        public GunItemEnum gunKind;
+        public GunEnum gunKind;
 
         public int nowBullet;
 
@@ -160,7 +163,7 @@ public class PlayerGunInfo
 
         public int nowReloadTime;
 
-        public GunInfo(GunItemEnum _gunKind)
+        public GunInfo(GunEnum _gunKind)
         {
             gunKind = _gunKind;
             nowBullet = _gunKind.getBullet();
@@ -175,16 +178,16 @@ public class PlayerGunInfo
         {
             if (!reloadFlg && !reloadNowFlg && !coolDownFlg) //銃を撃てるかどうか
             {
-                switch (this.gunKind)
+                switch (gunKind)
                 {
-                    case AUTOMATIC_GUN -> new GunShotEvent().automaticGun(player);
-                    case SHOT_GUN -> new GunShotEvent().shotGun(player);
-                    case SNIPER_GUN -> new GunShotEvent().sniperGun(player);
-                    case ABSORPTION_GUN -> new GunShotEvent().absorptionGun(player);
-                    case FLAME_THROWER_GUN -> new GunShotEvent().flameThrowerGun(player);
-                    case SEARCH_GUN -> new GunShotEvent().searchGun(player);
-                    case POTION_GUN -> new GunShotEvent().potionGun(player);
-                    case HAND_GUN -> new GunShotEvent().handGun(player);
+                    case AUTOMATIC_GUN -> new GunEvent().automaticGun(player);
+                    case SHOT_GUN -> new GunEvent().shotGun(player);
+                    case SNIPER_GUN -> new GunEvent().sniperGun(player);
+                    case ABSORPTION_GUN -> new GunEvent().absorptionGun(player);
+                    case FLAME_THROWER_GUN -> new GunEvent().flameThrowerGun(player);
+                    case SEARCH_GUN -> new GunEvent().searchGun(player);
+                    case POTION_GUN -> new GunEvent().potionGun(player);
+                    case HAND_GUN -> new GunEvent().handGun(player);
                 }
                 coolDownFlg = true;
                 nowBullet--;
