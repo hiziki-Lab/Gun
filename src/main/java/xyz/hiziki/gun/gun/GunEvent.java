@@ -44,7 +44,7 @@ public class GunEvent
         {
             Arrow arrow = shooter.getWorld().spawnArrow(shooter.getLocation().add(0, 1.75, 0), vec, 4F, 25F);
             arrow.setShooter(shooter);
-            arrow.setGravity(false);
+            arrow.setGravity(true);
             arrow.setCustomName("shotGun");
 
             shooter.getServer().getScheduler().runTaskLater(plugin, arrow :: remove, 200);
@@ -128,7 +128,7 @@ public class GunEvent
             {
                 SmallFireball fireball = shooter.getWorld().spawn(shooter.getEyeLocation().add(0, 0.5, 0), SmallFireball.class);
                 fireball.setShooter(shooter);
-                fireball.setGravity(false);
+                fireball.setGravity(true);
                 fireball.setVelocity(vec);
 
                 shooter.getServer().getScheduler().runTaskLater(plugin, fireball :: remove, 10);
