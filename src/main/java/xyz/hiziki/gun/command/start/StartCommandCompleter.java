@@ -18,29 +18,11 @@ public class StartCommandCompleter implements TabCompleter
         {
             case 1 ->
             {
-                list.add("enableRole");
-                list.add("disableRole");
-            }
-            case 2 ->
-            {
                 list.add("team");
-                list.add("survival");
+                list.add("oneLife");
                 list.add("solo");
             }
-            case 3 ->
-            {
-                list.add("exception_deleteRole");
-                list.add("exception_addRole");
-            }
-            default ->
-            {
-                list.add("Assault_Soldier");
-                list.add("Scout");
-                list.add("Reinforcements");
-                list.add("Sniper");
-                list.add("Destroyer");
-                list.add("special_soldier");
-            }
+            case 2 -> list.add("debug");
         }
         return list; //list
     }
