@@ -67,7 +67,7 @@ public final class Main extends JavaPlugin implements Listener
                 switch (args[0])
                 {
                     case "solo" -> gameMode = GameGameMode.SOLO;
-                    case "oneLife" -> gameMode = GameGameMode.SURVIVAL;
+                    case "oneLife" -> gameMode = GameGameMode.ONE_LIFE;
                     case "team" ->
                     {
                         scoreBoard = new ScoreboardSetter(getServer());
@@ -113,7 +113,7 @@ public final class Main extends JavaPlugin implements Listener
                 bar.removeAll();
             }
 
-            if (BossBarTask != null)
+            if (BossBarTask != null) //Null回避
             {
                 BossBarTask.cancel();
             }
@@ -169,7 +169,6 @@ public final class Main extends JavaPlugin implements Listener
                     target.viewBullet();
                 }
             }.runTaskLater(plugin, 1);
-
         }
     }
 
@@ -220,14 +219,8 @@ public final class Main extends JavaPlugin implements Listener
                 {
                     switch (gameMode)
                     {
-                        case TEAM :
-                            scoreBoard.pointCheck(e.getEntity().getKiller().getPlayer(), e.getEntity());
-                            break;
-                        case SOLO:
-                            break;
-                        case SURVIVAL:
-                            e.getEntity().setGameMode(GameMode.SPECTATOR);
-                            break;
+                        case TEAM -> scoreBoard.pointCheck(e.getEntity().getKiller().getPlayer(), e.getEntity());
+                        case ONE_LIFE -> e.getEntity().setGameMode(GameMode.SPECTATOR);
                     }
                 }
             }

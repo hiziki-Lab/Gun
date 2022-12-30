@@ -10,6 +10,6 @@ public enum GameGameMode
 {
     TEAM,
     SOLO,
-    SURVIVAL,
+    ONE_LIFE,
     NONE
 }
