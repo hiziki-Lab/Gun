@@ -9,7 +9,7 @@ import xyz.hiziki.gun.util.Item;
 import java.util.Arrays;
 import java.util.Objects;
 
-public enum GunItemEnum
+public enum GunEnum
 {
     AUTOMATIC_GUN(Item.setMeta(Material.MUSIC_DISC_13, ChatColor.GOLD + "自動小銃"),
             25, 5, 0),
@@ -43,12 +43,12 @@ public enum GunItemEnum
 
     private final double coolDownTime; //発射後のクールダウン
 
-    GunItemEnum(ItemStack itemStack, int bullet, int reloadTime, double coolDownTime)
+    GunEnum(ItemStack _itemStack, int _bullet, int _reloadTime, double _coolDownTime)
     {
-        this.gunItemStack = itemStack;
-        this.bullet = bullet;
-        this.reloadTime = reloadTime;
-        this.coolDownTime = coolDownTime;
+        gunItemStack = _itemStack;
+        bullet = _bullet;
+        reloadTime = _reloadTime;
+        coolDownTime = _coolDownTime;
     }
 
     public ItemStack getGunItemStack() //getter
@@ -71,9 +71,9 @@ public enum GunItemEnum
         return coolDownTime;
     }
 
-    public static GunItemEnum getKind(Player p) //getter
+    public static GunEnum getKind(Player p) //getter
     {
-        return Arrays.stream(GunItemEnum.values()).filter(v -> Objects.equals(v.getGunItemStack(),
+        return Arrays.stream(GunEnum.values()).filter(v -> Objects.equals(v.getGunItemStack(),
                 p.getInventory().getItemInMainHand())).findFirst().orElse(null);
     }
 }
