@@ -1,8 +1,8 @@
-package xyz.hiziki.gun.util;
+package xyz.hiziki.gun.team;
 
 import org.bukkit.ChatColor;
 
-public enum TeamKindEnum
+public enum TeamEnum
 {
     Red("team_red","赤", ChatColor.RED),
     Blue("team_blue","青",ChatColor.BLUE);
@@ -11,7 +11,7 @@ public enum TeamKindEnum
     private final String viewTeamName;
     private final ChatColor teamColor;
 
-    TeamKindEnum(String _teamName,String _viewTeamName, ChatColor _teamColor)
+    TeamEnum(String _teamName,String _viewTeamName, ChatColor _teamColor)
     {
         teamName = _teamName;
         viewTeamName = _viewTeamName;
@@ -38,9 +38,9 @@ public enum TeamKindEnum
         return "【"+this.getViewTeamName()+"】";
     }
 
-    public static TeamKindEnum getEnum(String teamName)
+    public static TeamEnum getEnum(String teamName)
     {
-        for (TeamKindEnum team : TeamKindEnum.values() )
+        for (TeamEnum team : TeamEnum.values() )
         {
             if (team.getTeamName().equals(teamName))
             {
