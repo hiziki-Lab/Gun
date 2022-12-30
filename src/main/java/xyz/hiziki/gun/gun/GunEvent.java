@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class GunShotEvent
+public class GunEvent
 {
     private final JavaPlugin plugin = Main.getPlugin();
 
