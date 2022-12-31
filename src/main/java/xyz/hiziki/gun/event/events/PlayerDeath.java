@@ -1,8 +1,10 @@
 package xyz.hiziki.gun.event.events;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,6 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.hiziki.gun.Main;
 import xyz.hiziki.gun.role.RoleEnum;
+import xyz.hiziki.gun.util.GameGameMode;
 
 import java.util.Random;
 
@@ -20,6 +23,8 @@ public class PlayerDeath
 
     public PlayerDeath(PlayerDeathEvent e)
     {
+        addPoint(e.getEntity());
+
         JavaPlugin plugin = Main.getPlugin();
 
         Player player = e.getEntity();
@@ -62,6 +67,29 @@ public class PlayerDeath
                         count--;
                     }
                 }.runTaskTimer(plugin, 0, 1);
+            }
+        }
+    }
+
+    private void addPoint(Entity entity)
+    {
+        if (Main.getGameMode() != GameGameMode.NONE)
+        {
+            if (entity instanceof Player player)
+            {
+                Player killer = player.getKiller();
+
+                if (killer != null)
+                {
+                    if (killer.getType() == EntityType.PLAYER)
+                    {
+                        switch (Main.getGameMode())
+                        {
+                            case TEAM -> Main.getScoreBoard().pointCheck(player.getKiller().getPlayer(), player);
+                            case ONE_LIFE -> player.setGameMode(GameMode.SPECTATOR);
+                        }
+                    }
+                }
             }
         }
     }

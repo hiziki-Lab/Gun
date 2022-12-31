@@ -1,7 +1,6 @@
 package xyz.hiziki.gun;
 
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,7 +11,6 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -41,7 +39,7 @@ public final class Main extends JavaPlugin implements Listener
 
     public BossBar bar;
 
-    public ScoreboardSetter scoreBoard;
+    public static ScoreboardSetter scoreBoard;
 
     public static List<GunInfoPlayer> gunInfoPlayerList;
 
@@ -190,22 +188,9 @@ public final class Main extends JavaPlugin implements Listener
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e)
     {
-        if (gameMode != GameGameMode.NONE)
-        {
-            if (e.getEntity().getKiller() != null)
-            {
-                if (e.getEntity().getKiller().getType() == EntityType.PLAYER)
-                {
-                    switch (gameMode)
-                    {
-                        case TEAM -> scoreBoard.pointCheck(e.getEntity().getKiller().getPlayer(), e.getEntity());
-                        case ONE_LIFE -> e.getEntity().setGameMode(GameMode.SPECTATOR);
-                    }
-                }
-            }
-        }
+
     }
-    
+
     public static GunInfoPlayer getPlayerGunInfo(Player player) //プレイヤーリスト検索
     {
         return gunInfoPlayerList.stream().filter(v ->
@@ -281,6 +266,11 @@ public final class Main extends JavaPlugin implements Listener
     public static GameGameMode getGameMode()
     {
         return gameMode;
+    }
+
+    public static ScoreboardSetter getScoreBoard()
+    {
+        return scoreBoard;
     }
 
     public static HashMap<Player, RoleEnum> getPlayerRole()
