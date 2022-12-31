@@ -43,7 +43,7 @@ public final class Main extends JavaPlugin implements Listener
 
     public static List<GunInfoPlayer> gunInfoPlayerList;
 
-    public List<RoleInfoPlayer> roleInfoPlayerList;
+    public static List<RoleInfoPlayer> roleInfoPlayerList;
 
     private static HashMap<Player, RoleEnum> playerRole;
 
@@ -79,6 +79,7 @@ public final class Main extends JavaPlugin implements Listener
             }
 
             gunInfoPlayerList = new ArrayList<>();
+            roleInfoPlayerList = new ArrayList<>();
 
             for (Player target : getServer().getOnlinePlayers())
             {
@@ -183,12 +184,6 @@ public final class Main extends JavaPlugin implements Listener
                 target.viewBullet();//玉の残段数を表示
             }
         }
-    }
-
-    @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent e)
-    {
-
     }
 
     public static GunInfoPlayer getPlayerGunInfo(Player player) //プレイヤーリスト検索
