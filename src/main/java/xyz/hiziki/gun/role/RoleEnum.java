@@ -1,6 +1,5 @@
 package xyz.hiziki.gun.role;
 
-import org.bukkit.inventory.ItemStack;
 import xyz.hiziki.gun.gun.GunEnum;
 
 import java.util.ArrayList;
