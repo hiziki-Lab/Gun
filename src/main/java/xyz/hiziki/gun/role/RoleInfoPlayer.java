@@ -26,6 +26,11 @@ public class RoleInfoPlayer
 
     public static class RoleInfo
     {
+        public RoleEnum roleKind;
 
+        public RoleInfo(RoleEnum _roleKind)
+        {
+            roleKind = _roleKind;
+        }
     }
 }
