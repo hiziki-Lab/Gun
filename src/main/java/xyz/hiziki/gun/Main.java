@@ -18,7 +18,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import xyz.hiziki.gun.command.CommandManager;
@@ -36,15 +35,15 @@ public final class Main extends JavaPlugin implements Listener
 {
     private static JavaPlugin plugin;
 
-    private GameGameMode gameMode;
+    private static GameGameMode gameMode;
 
-    public BukkitTask BossBarTask;
+    public BukkitTask bossBarTask;
 
     public BossBar bar;
 
     public ScoreboardSetter scoreBoard;
 
-    public List<GunInfoPlayer> gunInfoPlayerList;
+    public static List<GunInfoPlayer> gunInfoPlayerList;
 
     public List<RoleInfoPlayer> roleInfoPlayerList;
 
@@ -57,7 +56,7 @@ public final class Main extends JavaPlugin implements Listener
         {
             // GameStartコマンド が実行された時に実行
 
-            if(args.length == 0)
+            if (args.length == 0)
             {
                 sender.sendMessage(ChatColor.RED + "サブコマンドが設定されていません。");
                 return true;
@@ -85,14 +84,14 @@ public final class Main extends JavaPlugin implements Listener
 
             for (Player target : getServer().getOnlinePlayers())
             {
-                playerRole.put(target, randomLetter());
+                roleInfoPlayerList.add(new RoleInfoPlayer(target));
                 gunInfoPlayerList.add(new GunInfoPlayer(target));
             }
 
             //その他の設定
-            if (BossBarTask != null)
+            if (bossBarTask != null)
             {
-                BossBarTask.cancel();
+                bossBarTask.cancel();
             }
 
             if (bar != null)
@@ -113,9 +112,9 @@ public final class Main extends JavaPlugin implements Listener
                 bar.removeAll();
             }
 
-            if (BossBarTask != null) //Null回避
+            if (bossBarTask != null) //Null回避
             {
-                BossBarTask.cancel();
+                bossBarTask.cancel();
             }
 
             removeGun();
@@ -162,31 +161,13 @@ public final class Main extends JavaPlugin implements Listener
         {
             new BukkitRunnable()
             {
-                @Override public void run()
+                @Override
+                public void run()
                 {
                     GunInfoPlayer target = getPlayerGunInfo(e.getPlayer());
-                    //玉の残段数を表示
-                    target.viewBullet();
+                    target.viewBullet(); //玉の残段数を表示
                 }
             }.runTaskLater(plugin, 1);
-        }
-    }
-
-    @EventHandler
-    public void onPlayerToggleSneak(PlayerToggleSneakEvent e)
-    {
-        if (gameMode != GameGameMode.NONE)
-        {
-            GunInfoPlayer target = getPlayerGunInfo(e.getPlayer());
-            GunEnum kind = GunEnum.getKind(e.getPlayer());
-
-            if (kind != null)
-            {
-                //リロード処理
-                target.reload(kind);
-                //玉の残段数を表示
-                target.viewBullet();
-            }
         }
     }
 
@@ -200,10 +181,8 @@ public final class Main extends JavaPlugin implements Listener
 
             if (kind != null)
             {
-                //射撃
-                target.fire(kind);
-                //玉の残段数を表示
-                target.viewBullet();
+                target.fire(kind);//射撃
+                target.viewBullet();//玉の残段数を表示
             }
         }
     }
@@ -226,18 +205,11 @@ public final class Main extends JavaPlugin implements Listener
             }
         }
     }
-
-    private RoleEnum randomLetter()
-    {
-        int pick = new Random().nextInt(RoleEnum.values().length);
-        return RoleEnum.values()[pick];
-    }
-
-    //プレイヤーリスト検索
-    private GunInfoPlayer getPlayerGunInfo(Player Player)
+    
+    public static GunInfoPlayer getPlayerGunInfo(Player player) //プレイヤーリスト検索
     {
         return gunInfoPlayerList.stream().filter(v ->
-                Objects.equals(v.player.getUniqueId(), Player.getUniqueId())).findFirst().orElse(null);
+                Objects.equals(v.player.getUniqueId(), player.getUniqueId())).findFirst().orElse(null);
     }
 
     private void bossBarView()
@@ -245,12 +217,13 @@ public final class Main extends JavaPlugin implements Listener
         //画面上記のBar設定
         bar = getServer().createBossBar("戦争時間", BarColor.BLUE, BarStyle.SEGMENTED_6, BarFlag.CREATE_FOG);
         bar.setProgress(1);
+
         for (GunInfoPlayer target : gunInfoPlayerList)
         {
             bar.addPlayer(target.player);
         }
 
-        BossBarTask = Bukkit.getScheduler().runTaskTimer(this, new Runnable()
+        bossBarTask = Bukkit.getScheduler().runTaskTimer(this, new Runnable()
         {
             int Count = 0 ;
 
@@ -260,9 +233,8 @@ public final class Main extends JavaPlugin implements Listener
                 double tmp = (1 - (Count / (((double) 10) * 60)));
                 Count++;
                 bar.setProgress(Math.abs(tmp));
-                //終了時イベントをここに書く
 
-                if(tmp < 0)
+                if (tmp < 0) //終了時
                 {
                     for (GunInfoPlayer target : gunInfoPlayerList)
                     {
@@ -273,10 +245,10 @@ public final class Main extends JavaPlugin implements Listener
                     bar.removeAll();
                     gameMode = GameGameMode.NONE;
                 }
-                if(gameMode == GameGameMode.NONE)
+                if (gameMode == GameGameMode.NONE)
                 {
                     bar.removeAll();
-                    BossBarTask.cancel();
+                    bossBarTask.cancel();
                 }
             }
         },0,20);
@@ -304,6 +276,11 @@ public final class Main extends JavaPlugin implements Listener
     public static JavaPlugin getPlugin()
     {
         return plugin;
+    }
+
+    public static GameGameMode getGameMode()
+    {
+        return gameMode;
     }
 
     public static HashMap<Player, RoleEnum> getPlayerRole()
