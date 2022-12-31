@@ -13,7 +13,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,9 +21,7 @@ import xyz.hiziki.gun.command.CommandManager;
 import xyz.hiziki.gun.event.EventManager;
 import xyz.hiziki.gun.gun.GunEnum;
 import xyz.hiziki.gun.gun.GunInfoPlayer;
-import xyz.hiziki.gun.role.RoleInfoPlayer;
 import xyz.hiziki.gun.util.GameGameMode;
-import xyz.hiziki.gun.role.RoleEnum;
 import xyz.hiziki.gun.team.ScoreboardSetter;
 
 import java.util.*;
@@ -42,10 +39,6 @@ public final class Main extends JavaPlugin implements Listener
     public static ScoreboardSetter scoreBoard;
 
     public static List<GunInfoPlayer> gunInfoPlayerList;
-
-    public static List<RoleInfoPlayer> roleInfoPlayerList;
-
-    private static HashMap<Player, RoleEnum> playerRole;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
@@ -79,11 +72,9 @@ public final class Main extends JavaPlugin implements Listener
             }
 
             gunInfoPlayerList = new ArrayList<>();
-            roleInfoPlayerList = new ArrayList<>();
 
             for (Player target : getServer().getOnlinePlayers())
             {
-                roleInfoPlayerList.add(new RoleInfoPlayer(target));
                 gunInfoPlayerList.add(new GunInfoPlayer(target));
             }
 
@@ -137,7 +128,6 @@ public final class Main extends JavaPlugin implements Listener
         getServer().getPluginManager().registerEvents(this, this);
 
         gameMode = GameGameMode.NONE;
-        playerRole = new HashMap<>();
 
         new CommandManager(plugin);
         new EventManager(plugin);
@@ -266,10 +256,5 @@ public final class Main extends JavaPlugin implements Listener
     public static ScoreboardSetter getScoreBoard()
     {
         return scoreBoard;
-    }
-
-    public static HashMap<Player, RoleEnum> getPlayerRole()
-    {
-        return playerRole;
     }
 }

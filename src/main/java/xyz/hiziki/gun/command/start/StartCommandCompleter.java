@@ -14,16 +14,10 @@ public class StartCommandCompleter implements TabCompleter
     {
         List<String> list = new ArrayList<>(); //List作成
 
-        switch (args.length)
-        {
-            case 1 ->
-            {
-                list.add("team");
-                list.add("oneLife");
-                list.add("solo");
-            }
-            case 2 -> list.add("debug");
-        }
+        list.add("team");
+        list.add("oneLife");
+        list.add("solo");
+
         return list; //list
     }
 }

@@ -8,9 +8,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.projectiles.ProjectileSource;
 import xyz.hiziki.gun.Main;
-import xyz.hiziki.gun.role.RoleEnum;
 
 public class EntityDamageByEntity
 {
@@ -19,7 +17,6 @@ public class EntityDamageByEntity
     public EntityDamageByEntity(EntityDamageByEntityEvent e) //コンストラクタ
     {
         playerHitBullet(e);
-        damageEvent(e.getDamager(), e.getEntity());
     }
 
     private void playerHitBullet(EntityDamageByEntityEvent e) //弾が当たった時
@@ -38,9 +35,9 @@ public class EntityDamageByEntity
                         case "searchGun" ->
                         {
                             e.setDamage(0);
+
                             Firework firework = p.getWorld().spawn(p.getLocation(), Firework.class);
                             FireworkMeta meta = firework.getFireworkMeta();
-
                             meta.addEffects(FireworkEffect.builder().withColor(Color.GREEN).with(
                                     FireworkEffect.Type.BALL_LARGE).withFlicker().build());
                             meta.setPower(1);
@@ -55,7 +52,6 @@ public class EntityDamageByEntity
                         }
                         case "handGun" -> e.setDamage(1.5);
                     }
-
                     plugin.getServer().getScheduler().runTaskLaterAsynchronously(plugin, () -> p.setNoDamageTicks(0), 2L);
                 }
             }
@@ -63,24 +59,6 @@ public class EntityDamageByEntity
         else
         {
             e.setDamage(0);
-        }
-    }
-
-    private void damageEvent(Entity damager, Entity hitter) //斥候兵が攻撃を与えたとき
-    {
-        if (damager instanceof Arrow arrow)
-        {
-            ProjectileSource shooter = arrow.getShooter();
-
-            if (shooter instanceof Player attacker && hitter instanceof Player defender)
-            {
-                RoleEnum attackerRole = Main.getPlayerRole().get(attacker);
-
-                if (attackerRole == RoleEnum.SCOUT)
-                {
-                    defender.addPotionEffect(PotionEffectType.GLOWING.createEffect(100, 1));
-                }
-            }
         }
     }
 }

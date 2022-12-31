@@ -2,14 +2,11 @@ package xyz.hiziki.gun.gun;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.hiziki.gun.Main;
-import xyz.hiziki.gun.role.RoleEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,24 +30,6 @@ public class GunInfoPlayer
     public void setGun()
     {
         gunInfoList.clear();
-
-        List<GunEnum> guns;
-        Inventory inv = player.getInventory();
-
-        RoleEnum playerRole = Main.getPlayerRole().get(player);
-
-        guns = RoleEnum.getRoleGun(playerRole);
-
-        int count = 0;
-
-        for (GunEnum gun : guns)
-        {
-            gunInfoList.add(new GunInfoPlayer.GunInfo(gun));
-            inv.setItem(count, gun.getGunItemStack());
-
-            count++;
-        }
-        player.sendMessage(ChatColor.AQUA + "あなたのロールは" + playerRole + "です。");
     }
 
     public String bullet(ItemStack item)
@@ -75,8 +54,11 @@ public class GunInfoPlayer
     public void fire(GunEnum gunKind)
     {
         GunInfo guninfo = gunInfoList.stream().filter(v -> Objects.equals(v.gunKind, gunKind)).findFirst().orElse(null);
-        guninfo.fire(player);
-        coolDown(guninfo);
+        if (guninfo != null)
+        {
+            guninfo.fire(player);
+            coolDown(guninfo);
+        }
     }
 
     public void reload(GunEnum gunKind)
@@ -128,7 +110,10 @@ public class GunInfoPlayer
     private void coolDown(GunInfo gunInfo)
     {
         //クールダウン中は動かさない
-        if (gunInfo.coolDownNowFlg) return;
+        if (gunInfo.coolDownNowFlg)
+        {
+            return;
+        }
 
         if (gunInfo.gunKind.getCoolDownTime() == 0)
         {
