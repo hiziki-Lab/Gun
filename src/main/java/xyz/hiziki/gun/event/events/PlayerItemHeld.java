@@ -1,5 +1,6 @@
 package xyz.hiziki.gun.event.events;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.hiziki.gun.Main;
@@ -12,15 +13,20 @@ public class PlayerItemHeld
     {
         if (Main.getGameMode() != GunGameMode.NONE)
         {
-            new BukkitRunnable()
-            {
-                @Override
-                public void run()
-                {
-                    GunInfoPlayer target = Main.getPlayerGunInfo(e.getPlayer());
-                    target.viewBullet(); //玉の残段数を表示
-                }
-            }.runTaskLater(Main.getPlugin(), 1);
+            changeGun(e.getPlayer());
         }
+    }
+
+    private void changeGun(Player player)
+    {
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                GunInfoPlayer target = Main.getPlayerGunInfo(player);
+                target.viewBullet(); //玉の残段数を表示
+            }
+        }.runTaskLater(Main.getPlugin(), 1);
     }
 }

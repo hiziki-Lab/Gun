@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import xyz.hiziki.gun.Main;
+import xyz.hiziki.gun.util.GunGameMode;
 
 public class EntityDamageByEntity
 {
@@ -16,7 +17,10 @@ public class EntityDamageByEntity
 
     public EntityDamageByEntity(EntityDamageByEntityEvent e) //コンストラクタ
     {
-        playerHitBullet(e);
+        if (Main.getGameMode() != GunGameMode.NONE)
+        {
+            playerHitBullet(e);
+        }
     }
 
     private void playerHitBullet(EntityDamageByEntityEvent e) //弾が当たった時

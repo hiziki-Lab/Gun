@@ -13,18 +13,22 @@ public class PlayerDeath
     {
         if (Main.getGameMode() != GunGameMode.NONE)
         {
-            Player player = e.getEntity();
-            Player killer = player.getKiller();
+            addPoint(e.getEntity());
+        }
+    }
 
-            if (killer != null)
+    private void addPoint(Player player) //ポイントを追加するメソッド
+    {
+        Player killer = player.getKiller();
+
+        if (killer != null)
+        {
+            if (killer.getType() == EntityType.PLAYER)
             {
-                if (killer.getType() == EntityType.PLAYER)
+                switch (Main.getGameMode())
                 {
-                    switch (Main.getGameMode())
-                    {
-                        case TEAM -> Main.getScoreBoard().pointCheck(player.getKiller().getPlayer(), player);
-                        case ONE_LIFE -> player.setGameMode(GameMode.SPECTATOR);
-                    }
+                    case TEAM -> Main.getScoreBoard().pointCheck(player.getKiller().getPlayer(), player);
+                    case ONE_LIFE -> player.setGameMode(GameMode.SPECTATOR);
                 }
             }
         }
