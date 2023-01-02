@@ -5,13 +5,13 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import xyz.hiziki.gun.Main;
-import xyz.hiziki.gun.util.GameGameMode;
+import xyz.hiziki.gun.util.GunGameMode;
 
 public class PlayerDeath
 {
     public PlayerDeath(PlayerDeathEvent e)
     {
-        if (Main.getGameMode() != GameGameMode.NONE)
+        if (Main.getGameMode() != GunGameMode.NONE)
         {
             Player player = e.getEntity();
             Player killer = player.getKiller();

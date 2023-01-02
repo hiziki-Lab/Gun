@@ -1,14 +1,14 @@
 package xyz.hiziki.gun.event.events;
 
-import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import xyz.hiziki.gun.Main;
 import xyz.hiziki.gun.gun.GunEnum;
 import xyz.hiziki.gun.gun.GunInfoPlayer;
 import xyz.hiziki.gun.util.GunGameMode;
 
-public class PlayerToggleSneak
+public class PlayerInteract
 {
-    public PlayerToggleSneak(PlayerToggleSneakEvent e)
+    public PlayerInteract(PlayerInteractEvent e)
     {
         if (Main.getGameMode() != GunGameMode.NONE)
         {
@@ -17,10 +17,8 @@ public class PlayerToggleSneak
 
             if (kind != null)
             {
-                //リロード処理
-                target.reload(kind);
-                //玉の残段数を表示
-                target.viewBullet();
+                target.fire(kind);//射撃
+                target.viewBullet();//玉の残段数を表示
             }
         }
     }
