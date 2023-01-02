@@ -7,7 +7,6 @@ import xyz.hiziki.gun.Main;
 
 public class RemoveGun
 {
-
     public RemoveGun()
     {
         JavaPlugin plugin = Main.getPlugin();
